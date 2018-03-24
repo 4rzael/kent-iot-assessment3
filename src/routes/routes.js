@@ -10,56 +10,32 @@ import Typography from 'src/components/Dashboard/Views/Typography.vue'
 import Icons from 'src/components/Dashboard/Views/Icons.vue'
 import Maps from 'src/components/Dashboard/Views/Maps.vue'
 import Notifications from 'src/components/Dashboard/Views/Notifications.vue'
+import GreenhousePage from 'src/components/GreenhousePage'
 
 const routes = [
   {
     path: '/',
     component: DashboardLayout,
-    redirect: '/admin/overview'
-  },
-  {
-    path: '/admin',
-    component: DashboardLayout,
-    redirect: '/admin/overview',
     children: [
       {
-        path: 'overview',
-        name: 'Overview',
-        component: Overview
-      },
-      {
-        path: 'user',
-        name: 'User',
-        component: UserProfile
-      },
-      {
-        path: 'table-list',
-        name: 'Table List',
-        component: TableList
-      },
-      {
-        path: 'typography',
-        name: 'Typography',
-        component: Typography
-      },
-      {
-        path: 'icons',
-        name: 'Icons',
-        component: Icons
-      },
-      {
-        path: 'maps',
-        name: 'Maps',
-        component: Maps
-      },
-      {
-        path: 'notifications',
-        name: 'Notifications',
-        component: Notifications
+        path: '/:id',
+        name: 'Greenhouse',
+        component: GreenhousePage
       }
     ]
   },
-  { path: '*', component: NotFound }
+  // {
+  //   path: '/farmer',
+  //   redirect: '/',
+  //   children: [
+  //     {
+  //       path: '/greenhouse/:id',
+  //       name: 'Greenhouse',
+  //       component: GreenhousePage
+  //     }
+  //   ]
+  // },
+  { path: '*', component: DashboardLayout }
 ]
 
 /**

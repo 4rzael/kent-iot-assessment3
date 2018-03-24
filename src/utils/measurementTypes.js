@@ -1,0 +1,5 @@
+export const MEASUREMENT_TEMPERATURE = 'temperature'
+export const MEASUREMENT_MOISTURE = 'moisture'
+export const MEASUREMENT_NUTRIMENTS = 'tds'
+export const MEASUREMENT_LUMINOSITY = 'light'
+export const MEASUREMENT_BATTERY = 'battery'

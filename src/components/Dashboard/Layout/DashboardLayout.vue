@@ -5,8 +5,17 @@
       <sidebar-link to="/admin/overview">
         <i class="nc-icon nc-chart-pie-35"></i>
         <p>Dashboard</p>
+
+        <sidebar-link v-for="site in sites" :key="site.id" :to="site.id">
+          <i class="nc-icon nc-bank"></i>
+          <p>{{site.name}}</p>
+        </sidebar-link>
+
       </sidebar-link>
-      <sidebar-link to="/admin/user">
+
+
+
+<!--       <sidebar-link to="/admin/user">
         <i class="nc-icon nc-circle-09"></i>
         <p>User Profile</p>
       </sidebar-link>
@@ -30,7 +39,7 @@
         <i class="nc-icon nc-bell-55"></i>
         <p>Notifications</p>
       </sidebar-link>
-    </side-bar>
+ -->    </side-bar>
     <div class="main-panel">
       <top-navbar></top-navbar>
 
@@ -50,6 +59,8 @@
   import ContentFooter from './ContentFooter.vue'
   import DashboardContent from './Content.vue'
   import MobileMenu from './MobileMenu.vue'
+  import { mapState } from 'vuex'
+
   export default {
     components: {
       TopNavbar,
@@ -57,12 +68,18 @@
       DashboardContent,
       MobileMenu
     },
+    computed: mapState({
+      sites: store => store.api.sites
+    }),
     methods: {
       toggleSidebar () {
         if (this.$sidebar.showSidebar) {
           this.$sidebar.displaySidebar(false)
         }
       }
+    },
+    mounted () {
+      this.$store.dispatch('retrieveSites')
     }
   }
 
