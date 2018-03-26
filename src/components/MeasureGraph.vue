@@ -11,11 +11,56 @@ import Chart from './Chartjs.vue'
 
 export default {
   name: 'measure-graph',
-  props: ['measurementType', 'devicesIds'],
+  props: ['measurementType', 'devicesIds', 'greenhouseId'],
   computed: {
     devices () {
       this.retrieveMeasurements()
       return this.devicesIds
+    },
+
+    limits () {
+      if (this.$store.state.api.greenhousesLimits[this.greenhouseId]) {
+        return this.$store.state.api.greenhousesLimits[this.greenhouseId][this.measurementType]
+      } else {
+        return undefined
+      }
+    },
+
+    annotations () {
+      if (!this.limits) {
+        return undefined
+      } else {
+        return {
+          events: ['click'],
+          annotations: [
+            {
+              drawTime: 'beforeDatasetsDraw',
+              id: 'min',
+              type: 'box',
+              yScaleID: 'y-axis-0',
+              yMax: this.limits.min,
+              backgroundColor: '#FF000020'
+            },
+            {
+              drawTime: 'beforeDatasetsDraw',
+              id: 'max',
+              type: 'box',
+              yScaleID: 'y-axis-0',
+              yMin: this.limits.max,
+              backgroundColor: '#FF000020'
+            },
+            {
+              drawTime: 'beforeDatasetsDraw',
+              id: 'great',
+              type: 'box',
+              yScaleID: 'y-axis-0',
+              yMin: this.limits.min,
+              yMax: this.limits.max,
+              backgroundColor: '#00FF0020'
+            }
+          ]
+        }
+      }
     },
 
     values () {
@@ -52,9 +97,9 @@ export default {
         scales: {
           xAxes: [{
             type: 'time'
-            // time: {}
           }]
-        }
+        },
+        annotation: this.annotations
       }
     }
   },

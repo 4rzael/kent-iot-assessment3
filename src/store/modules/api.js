@@ -5,12 +5,32 @@ import Vue from 'vue'
 import cache from '../../utils/cache'
 
 import * as measurementRates from '../../utils/measurementRates'
+import * as measurementTypes from '../../utils/measurementTypes'
 
 const state = {
   sites: [],
   devices: [],
   preciseDevices: {},
-  measurements: {} // {DEVICE_ID: {MEASUREMENT_TYPE: [{date: Date, value: float, min: float, max: float}]}}
+  measurements: {}, // {DEVICE_ID: {MEASUREMENT_TYPE: [{date: Date, value: float, min: float, max: float}]}}
+  greenhousesLimits: {
+    gh1: {
+      [measurementTypes.MEASUREMENT_TEMPERATURE]: {min: 18, max: 35},
+      [measurementTypes.MEASUREMENT_NUTRIMENTS]: {min: 300, max: 700},
+      [measurementTypes.MEASUREMENT_MOISTURE]: {min: 50, max: 75},
+      [measurementTypes.MEASUREMENT_LUMINOSITY]: {min: 10000, max: 50000}
+    },
+    gh2: {
+      [measurementTypes.MEASUREMENT_TEMPERATURE]: {min: 18, max: 27},
+      [measurementTypes.MEASUREMENT_NUTRIMENTS]: {min: 280, max: 700},
+      [measurementTypes.MEASUREMENT_MOISTURE]: {min: 30, max: 45},
+      [measurementTypes.MEASUREMENT_LUMINOSITY]: {min: 10000, max: 50000}
+    },
+    gh3: {
+      [measurementTypes.MEASUREMENT_TEMPERATURE]: {min: 15, max: 32},
+      [measurementTypes.MEASUREMENT_MOISTURE]: {min: 40, max: 55},
+      [measurementTypes.MEASUREMENT_LUMINOSITY]: {min: 10000, max: 50000}
+    }
+  }
 }
 
 const mutations = {

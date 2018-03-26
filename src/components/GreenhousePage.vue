@@ -2,7 +2,7 @@
   <div>
     {{greenhouse.name}}
     <div v-for="(graph, key) in graphs" :key="key">
-      <measure-graph :measurementType="key" :devicesIds="graph"></measure-graph>
+      <measure-graph :measurementType="key" :devicesIds="graph" :greenhouseId="greenhouse.id"></measure-graph>
     </div>
   </div>
 </template>

@@ -4,6 +4,7 @@
 
 <script>
 import Chart from 'chart.js' // With moment.js
+import Annotations from 'chartjs-plugin-annotation'
 
 const types = ['line', 'bar', 'radar', 'polarArea', 'pie', 'doughnut', 'bubble', 'scatter']
 
@@ -49,6 +50,7 @@ export default {
       }
 
       this.chart = new Chart(this.$el, {
+        plugins: [Annotations],
         type: this.type,
         data: this.data,
         options: this.options,

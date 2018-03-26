@@ -17,6 +17,7 @@
     "bootstrap": "^4.0.0-beta.2",
     "chart.js": "^2.7.2",
     "chartist": "^0.11.0",
+    "chartjs-plugin-annotation": "^0.5.7",
     "es6-promise": "^4.1.1",
     "google-maps": "^3.2.1",
     "node-object-hash": "^1.3.0",
