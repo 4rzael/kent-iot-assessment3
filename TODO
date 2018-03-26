@@ -1,0 +1,11 @@
+Sur les graphes:							[max]
+- ameliorer (rendre plus beau)
+- avoir la possbilite d'afficher les date (de telle a telle date)
+- les bares (au dessus/en dessous de la dangereux)
+integrer l'interface ingenieur						[janel]
+MQTT (+ add les commandes sur microcontroleur)				[]
+gerer les picks bizarres (erreurs)					[abdel]
+gestion des notifiquations						[]
+refresh automatiquement (pas que F5)					[]
+video + rapport								[all]
+
