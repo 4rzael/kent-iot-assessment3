@@ -11,16 +11,35 @@ import Icons from 'src/components/Dashboard/Views/Icons.vue'
 import Maps from 'src/components/Dashboard/Views/Maps.vue'
 import Notifications from 'src/components/Dashboard/Views/Notifications.vue'
 import GreenhousePage from 'src/components/GreenhousePage'
+import OverviewPage from 'src/components/OverviewPage'
+import MapPage from 'src/components/Dashboard/Views/Maps.vue'
 
 const routes = [
   {
     path: '/',
+    redirect: '/map',
     component: DashboardLayout,
     children: [
       {
-        path: '/:id',
+        path: 'greenhouses/:id',
         name: 'Greenhouse',
         component: GreenhousePage
+      },
+      {
+        path: 'map',
+        name: 'map',
+        component: MapPage
+      }
+    ]
+  },
+  {
+    path: '/admin',
+    component: DashboardLayout,
+    children: [
+      {
+        path: 'overview',
+        name: 'Overview',
+        component: OverviewPage
       }
     ]
   },

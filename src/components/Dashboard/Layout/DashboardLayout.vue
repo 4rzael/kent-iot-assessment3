@@ -1,18 +1,21 @@
 <template>
   <div class="wrapper">
     <side-bar>
-      <mobile-menu slot="content"></mobile-menu>
-      <sidebar-link to="/admin/overview">
-        <i class="nc-icon nc-chart-pie-35"></i>
+    <mobile-menu slot="content"></mobile-menu>
+    <sidebar-link to="">
+        <i class="fa fa-dashboard"></i>
+        <!-- <i class="nc-icon nc-chart-pie-35"></i> -->
         <p>Dashboard</p>
+    </sidebar-link>
 
-        <sidebar-link v-for="site in sites" :key="site.id" :to="site.id">
-          <i class="nc-icon nc-bank"></i>
-          <p>{{site.name}}</p>
-        </sidebar-link>
-
-      </sidebar-link>
-
+    <sidebar-link v-for="site in sites" :key="site.id" :to="'/greenhouses/' + site.id">
+      <i class="nc-icon nc-bank"></i>
+      <p>{{site.name}}</p>
+    </sidebar-link>
+    <sidebar-link to="/admin/overview">
+      <i class="nc-icon nc-settings-tool-66"></i>
+      <p>Engineer</p>
+    </sidebar-link>
 
 
 <!--       <sidebar-link to="/admin/user">
@@ -44,7 +47,6 @@
       <top-navbar></top-navbar>
 
       <dashboard-content @click="toggleSidebar">
-
       </dashboard-content>
 
       <content-footer></content-footer>

@@ -1,30 +1,63 @@
 <template>
-  <gmap-map
-    id="map"
-    :center="center"
-    :zoom="13"
-    :options="options"
-    map-type-id="terrain"
-  >
-    <gmap-marker :position="center">
-    </gmap-marker>
-  </gmap-map>
+  <div v-if="sitesFound">
+    <gmap-map
+      id="map"
+      :center="center"
+      :zoom="15"
+      :options="options"
+      map-type-id="satellite"
+    >
+    <gmap-marker
+        v-for="m in toFix"
+        :key="m.name"
+        :position="m.position"
+        :clickable="true"
+        :draggable="true"
+      ></gmap-marker>
+      <!-- <gmap-marker :position="center">
+      </gmap-marker> -->
+    </gmap-map>
+  </div>
 </template>
 <script>
   import {API_KEY} from './Maps/API_KEY'
   import Vue from 'vue'
   import * as VueGoogleMaps from 'vue2-google-maps'
+  import device from "@/components/Device"
+
   Vue.use(VueGoogleMaps, {
     load: {
       key: API_KEY
     }
   })
   export default {
+    computed: {
+      sites () {
+        console.log("Devices from store:", this.$store.state.api.sites);
+        return this.$store.state.api.sites
+      },
+      toFix () {
+        // return [{
+        //   name: 'asd',
+        //   position: {lat: 51.3552, lng: 1.287159}
+        // }, {
+        //   name: 'qwe',
+        //   position: {lat: 51.355124, lng: 1.287159}
+        // }]
+       return this.sites.map(site => ({name: site.id, position: {lat: site.lat, lng: site.lon}}))
+      },
+      sitesFound() {
+        return this.toFix.length > 0
+      }
+    },
+    mounted () {
+      this.$store.dispatch('retrieveDevices')
+    },
     data () {
       return {
         center: {
-          lat: 40.748817,
-          lng: -73.985428
+          lat: 51.35520071504046,
+          lng: 1.2871598865234546
         },
         options: {
           styles: [{

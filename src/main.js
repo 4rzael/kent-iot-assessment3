@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+import BootstrapVue from 'bootstrap-vue'
+
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import App from './App.vue'
@@ -17,6 +19,7 @@ import routes from './routes/routes'
 // plugin setup
 Vue.use(VueRouter)
 Vue.use(LightBootstrap)
+Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
 
 // configure router

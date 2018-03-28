@@ -18,6 +18,9 @@ export default {
       return this.$store.state.api.sites
         .find(site => site.id === this.$store.state.route.params.id)
     },
+    beforeCreate () {
+      console.log("beforeCreate");
+    },
 
     zoneIds () {
       return this.greenhouse !== undefined
