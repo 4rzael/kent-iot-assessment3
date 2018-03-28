@@ -2,14 +2,14 @@
   <div>
     <div>
       <p class="card-text btn" style="cursor: default;">
-        <i class="fa fa-battery pull-left nomargin"></i>
+        <i class="fa fa-battery pull-left nomargin" :style="batteryStyle"></i>
         Battery: {{currentBattery}}%
       </p>
     </div>
     <div>
       <p class="card-text btn" style="cursor: default;">
-        <i class="fa fa-exclamation-circle pull-left nomargin"></i>
-        Errors: {{errorcnt}}
+        <i class="fa fa-exclamation-circle pull-left nomargin" :style="errorsStyle"></i>
+        Errors: {{errorsCount}}
       </p>
     </div>
   </div>
@@ -25,47 +25,46 @@
   export default {
     name: 'device',
     props: ['deviceId'],
-    data () {
-      return {
-        msg: 'Hello from child',
-        errorcnt: 2
-      }
-    },
-    computed: {
-      batteryHistory () {
-        return this.$store.getters.getMeasurements(
-          this.deviceId,
-          measurementTypes.MEASUREMENT_BATTERY,
-          measurementRates.MEASUREMENT_DAYS)
+    data: () => ({
+      batteryColor (value) {
+        if (value >= 95) {
+          return 'green'
+        } else if (value > 15) {
+          return 'orange'
+        } else {
+          return 'red'
+        }
       },
+      errorsColor(value) {
+        return (value > 0) ? 'red' : 'green'
+      },
+        errorsCount: 12
+    }),
+    computed: {
       currentBattery () {
         const lastBattery = this.$store.getters.getMeasurements(
           this.deviceId,
           measurementTypes.MEASUREMENT_BATTERY,
           measurementRates.MEASUREMENT_LAST)
-          console.log("lastBattery", lastBattery)
         if (lastBattery !== undefined) {
           return lastBattery.value
         } else {
           return undefined
         }
+      },
+      batteryStyle () {
+        return 'color:' + this.batteryColor(this.currentBattery) + ';'
+      },
+      errorsStyle () {
+        return 'color:' + this.errorsColor(this.errorsCount) + ';'
       }
     },
     mounted () {
-        // this.$store.dispatch('retrieveMeasurements', {
-        //   deviceId: this.deviceId,
-        //   measurementType: measurementTypes.MEASUREMENT_BATTERY,
-        //   measurementRate: measurementRates.MEASUREMENT_DAYS
-        // })
-        console.log("hello", this);
         this.$store.dispatch('retrieveLastMeasurement', {
           deviceId: this.deviceId,
           measurementType: measurementTypes.MEASUREMENT_BATTERY
         })
       }
-      // currentBattery () {
-      //   return this.$store.getters.getMeasurements(this.deviceId)
-      // }
 }
 </script>
 
