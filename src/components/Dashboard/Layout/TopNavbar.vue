@@ -15,31 +15,28 @@
       </button>
       <div class="collapse navbar-collapse justify-content-end">
         <ul class="nav navbar-nav mr-auto">
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a class="nav-link" href="#" data-toggle="dropdown">
               <i class="nc-icon nc-palette"></i>
             </a>
-          </li>
-          <drop-down tag="li">
+          </li> -->
+          <notification-list></notification-list>
+          <!-- <drop-down tag="li">
             <template slot="title">
               <i class="nc-icon nc-planet"></i>
               <b class="caret"></b>
-              <span class="notification">5</span>
+              <span class="notification">{{unreadNumber}}</span>
             </template>
-            <a class="dropdown-item" href="#">Notification 1</a>
-            <a class="dropdown-item" href="#">Notification 2</a>
-            <a class="dropdown-item" href="#">Notification 3</a>
-            <a class="dropdown-item" href="#">Notification 4</a>
-            <a class="dropdown-item" href="#">Another notification</a>
-          </drop-down>
-          <li class="nav-item">
+            <a v-for="notif in notifs" :key="notif._id" class="dropdown-item" href="#" @click="readNotification(notif)">{{notif.message}}</a>
+          </drop-down> -->
+          <!-- <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nc-icon nc-zoom-split"></i>
               <span class="d-lg-block">&nbsp;Search</span>
             </a>
-          </li>
+          </li> -->
         </ul>
-        <ul class="navbar-nav ml-auto">
+        <!-- <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" href="#">
               Account
@@ -59,13 +56,18 @@
               Log out
             </a>
           </li>
-        </ul>
+        </ul> -->
       </div>
     </div>
   </nav>
 </template>
 <script>
+  import NotificationsList from '../../NotificationsList.vue'
+
   export default {
+    components: {
+      'notification-list': NotificationsList
+    },
     computed: {
       routeName () {
         const {name} = this.$route
@@ -93,6 +95,9 @@
       hideSidebar () {
         this.$sidebar.displaySidebar(false)
       }
+    },
+    mounted () {
+      this.$store.dispatch('retrieveNotifications')
     }
   }
 
