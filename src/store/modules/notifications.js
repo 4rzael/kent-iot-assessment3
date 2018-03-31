@@ -2,10 +2,12 @@ import * as types from '../mutation-types'
 import axios from 'axios'
 import Vue from 'vue'
 
-import cache from '../../utils/cache'
+import cache from '../plugins/cache'
 
 import * as measurementRates from '../../utils/measurementRates'
 import * as measurementTypes from '../../utils/measurementTypes'
+
+const API_HOST = 'http://iot.4rzael.com:3000'
 
 const state = {
   notifications: []
@@ -35,7 +37,7 @@ const mutations = {
 const actions = {
   retrieveNotifications: cache('retrieveNotifications',
     async function (apiStore) {
-      const res = await axios.get('http://localhost:3000')
+      const res = await axios.get(API_HOST)
       const notifs = res.data
       if (notifs !== undefined) {
         apiStore.commit(types.SET_NOTIFICATIONS, notifs)
@@ -45,7 +47,7 @@ const actions = {
     }
   ),
   readNotification: async function (apiStore, notif) {
-    const res = await axios.put(`http://localhost:3000/${notif._id}/read`)
+    const res = await axios.put(`${API_HOST}/${notif._id}/read`)
     const updatedNotif = res.data
     if (updatedNotif !== undefined) {
       apiStore.commit(types.EDIT_NOTIFICATION, updatedNotif)
@@ -54,10 +56,18 @@ const actions = {
     }
   },
   deleteNotification: async function (apiStore, notif) {
-    const res = await axios.delete(`http://localhost:3000/${notif._id}`)
+    const res = await axios.delete(`${API_HOST}/${notif._id}`)
     apiStore.commit(types.DELETE_NOTIFICATION, notif)
-  }
+  },
+  postNotification: async function (apiStore, {message, date}) {
+    console.log('post', apiStore)
+    const notif = {
+      message,
+      date: date || new Date()
+    }
 
+    await axios.post(API_HOST, notif)
+  }
 }
 
 const getters = {

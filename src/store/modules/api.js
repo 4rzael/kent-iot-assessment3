@@ -2,7 +2,7 @@ import * as types from '../mutation-types'
 import axios from 'axios'
 import Vue from 'vue'
 
-import cache from '../../store/plugins/cache'
+import cache from '../plugins/cache'
 
 import * as measurementRates from '../../utils/measurementRates'
 import * as measurementTypes from '../../utils/measurementTypes'
