@@ -1,29 +1,25 @@
 <template>
-  <div v-if="sitesFound">
-    <gmap-map
-      id="map"
-      :center="center"
-      :zoom="15"
-      :options="options"
-      map-type-id="satellite"
-    >
+  <gmap-map
+    id="map"
+    :center="center"
+    :zoom="15"
+    map-type-id="satellite">
     <gmap-marker
-        v-for="m in toFix"
-        :key="m.name"
-        :position="m.position"
-        :clickable="true"
-        :draggable="true"
-      ></gmap-marker>
-      <!-- <gmap-marker :position="center">
-      </gmap-marker> -->
-    </gmap-map>
-  </div>
+        v-for="marker in mapMarkers"
+        :key="marker.name"
+        :position="marker.position"
+        :draggable="false"
+        :label="marker.name">
+    </gmap-marker>
+  </gmap-map>
 </template>
 <script>
   import {API_KEY} from './Maps/API_KEY'
   import Vue from 'vue'
   import * as VueGoogleMaps from 'vue2-google-maps'
   import device from "@/components/Device"
+  export const THANET_EARTH_LAT = 51.309064
+  export const THANET_EARTH_LON = 1.101947
 
   Vue.use(VueGoogleMaps, {
     load: {
@@ -36,18 +32,8 @@
         console.log("Devices from store:", this.$store.state.api.sites);
         return this.$store.state.api.sites
       },
-      toFix () {
-        // return [{
-        //   name: 'asd',
-        //   position: {lat: 51.3552, lng: 1.287159}
-        // }, {
-        //   name: 'qwe',
-        //   position: {lat: 51.355124, lng: 1.287159}
-        // }]
+      mapMarkers () {
        return this.sites.map(site => ({name: site.id, position: {lat: site.lat, lng: site.lon}}))
-      },
-      sitesFound() {
-        return this.toFix.length > 0
       }
     },
     mounted () {
@@ -56,8 +42,8 @@
     data () {
       return {
         center: {
-          lat: 51.35520071504046,
-          lng: 1.2871598865234546
+          lat: THANET_EARTH_LAT,
+          lng: THANET_EARTH_LON
         },
         options: {
           styles: [{
