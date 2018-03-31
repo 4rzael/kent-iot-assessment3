@@ -13,6 +13,7 @@ import Notifications from 'src/components/Dashboard/Views/Notifications.vue'
 import GreenhousePage from 'src/components/GreenhousePage'
 import OverviewPage from 'src/components/OverviewPage'
 import MapPage from 'src/components/Dashboard/Views/Maps.vue'
+import WeatherPage from 'src/components/WeatherPage.vue'
 import ActionPage from 'src/components/ActionPage'
 
 const routes = [
@@ -30,6 +31,11 @@ const routes = [
         path: 'map',
         name: 'map',
         component: MapPage
+      },
+      {
+        path: 'weather',
+        name: 'Weather',
+        component: WeatherPage
       }
     ]
   },

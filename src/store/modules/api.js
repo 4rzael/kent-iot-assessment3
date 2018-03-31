@@ -12,6 +12,7 @@ const state = {
   devices: [],
   preciseDevices: {},
   measurements: {}, // {DEVICE_ID: {MEASUREMENT_TYPE: [{date: Date, value: float, min: float, max: float}]}}
+  unusualMeasurements: {},  // {DEVICE_ID: {MEASUREMENT_TYPE: [{date: Date, value: float, min: float, max: float}]}}
   greenhousesLimits: {
     gh1: {
       [measurementTypes.MEASUREMENT_TEMPERATURE]: {min: 18, max: 35},
@@ -51,6 +52,16 @@ const mutations = {
   },
   [types.SET_DEVICE] (apiState, { deviceId, device }) {
     Vue.set(apiState.preciseDevices, deviceId, device)
+  },
+  [types.SET_UNUSUAL_MEASUREMENTS] (apiState, { deviceId, measurementType, measurementRate, unusualMeasurements }) {
+    if (apiState.unusualMeasurements[deviceId] === undefined) {
+      Vue.set(apiState.unusualMeasurements, deviceId, {})
+    }
+    if (apiState.unusualMeasurements[deviceId][measurementType] === undefined) {
+      Vue.set(apiState.unusualMeasurements[deviceId], measurementType, {})
+    }
+    Vue.set(apiState.unusualMeasurements[deviceId][measurementType], measurementRate, unusualMeasurements)
+
   }
 }
 
@@ -118,7 +129,10 @@ const actions = {
             max: measurement.max || measurement.value
           }))
 
+
         apiStore.commit(types.SET_MEASUREMENTS, {deviceId, measurementType, measurementRate, measurements})
+
+        updateUnusualMeasurements(apiStore, measurements, {deviceId, measurementType, measurementRate})
       } else {
         console.error('Error while getting measurements', res)
       }
@@ -135,7 +149,63 @@ const actions = {
         console.error('Error while getting sensor precise informations', res)
       }
     }
+  ),
+
+  retrieveUnusualMeasurements: cache('retrieveUnusualMeasurements',
+    async function (apiStore, {deviceId, measurementType, measurementRate}) {
+      if (measurementRate === undefined) {
+        measurementRate = measurementRates.MEASUREMENT_HOURS
+      }
+
+      const res =
+      await axios.get('http://shed.kent.ac.uk/device' +
+                      '/' + deviceId +
+                      '/' + measurementType +
+                      '/' + measurementRate)
+      if (res.data !== undefined) {
+        const measurements = res.data
+          .map(measurement => ({
+            time: new Date(measurement.time),
+            value: measurement.value || measurement.mean,
+            min: measurement.min || measurement.value,
+            max: measurement.max || measurement.value
+          }))
+
+      } else {
+        console.error('Error while getting measurements', res)
+      }
+    }
   )
+}
+
+function updateUnusualMeasurements (apiStore, measurements, {deviceId, measurementType, measurementRate}) {
+  var sum = 0;
+  for (var i = 0; i < measurements.length; i++) {
+    sum += parseFloat( measurements[i]['value'] );
+  }
+
+  var avg = sum / measurements.length;
+
+  var standardDeviation = 0;
+  for (var i = 0; i < measurements.length; i++) {
+    standardDeviation += Math.pow( parseFloat( measurements[i]['value'] ) - avg, 2 );
+  }
+  standardDeviation = Math.sqrt(standardDeviation / measurements.length);
+
+  var unusualMeasurements = [];
+  const minUsualValue = avg - (2 * standardDeviation);
+  const maxUsualValue = avg + (2 * standardDeviation);
+
+  for (var i = 0; i < measurements.length; i++) {
+    const value =  parseFloat( measurements[i]['value'] );
+    if (value < minUsualValue || value > maxUsualValue) {
+      unusualMeasurements.push(measurements[i]);
+    }
+  }
+
+  // console.log(unusualMeasurements);
+
+  apiStore.commit(types.SET_UNUSUAL_MEASUREMENTS, {deviceId, measurementType, measurementRate, unusualMeasurements})
 }
 
 const getters = {
@@ -149,7 +219,20 @@ const getters = {
         return state.measurements[deviceId][measurementType][measurementRate]
       }
     }
+  },
+
+  getUnusualMeasurements (state) {
+    return (deviceId, measurementType, measurementRate) => {
+      if (state.unusualMeasurements[deviceId] === undefined) {
+        return undefined
+      } else if (state.unusualMeasurements[deviceId][measurementType] === undefined) {
+        return undefined
+      } else {
+        return state.unusualMeasurements[deviceId][measurementType][measurementRate]
+      }
+    }
   }
+
 }
 
 export default {
