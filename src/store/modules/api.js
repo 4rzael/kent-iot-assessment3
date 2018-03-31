@@ -193,8 +193,8 @@ function updateUnusualMeasurements (apiStore, measurements, {deviceId, measureme
   standardDeviation = Math.sqrt(standardDeviation / measurements.length);
 
   var unusualMeasurements = [];
-  const minUsualValue = avg - standardDeviation;
-  const maxUsualValue = avg + standardDeviation;
+  const minUsualValue = avg - (2 * standardDeviation);
+  const maxUsualValue = avg + (2 * standardDeviation);
 
   for (var i = 0; i < measurements.length; i++) {
     const value =  parseFloat( measurements[i]['value'] );
