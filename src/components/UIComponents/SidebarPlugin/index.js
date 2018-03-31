@@ -4,11 +4,11 @@ import SidebarLink from './SidebarLink.vue'
 const SidebarStore = {
   showSidebar: false,
   sidebarLinks: [
-    {
-      name: 'Dashboard',
-      icon: 'ti-panel',
-      path: '/admin/overview'
-    }
+    // {
+    //   name: 'Dashboard',
+    //   icon: 'ti-panel',
+    //   path: '/'
+    // }
   ],
   displaySidebar (value) {
     this.showSidebar = value

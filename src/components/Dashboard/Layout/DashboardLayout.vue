@@ -2,7 +2,7 @@
   <div class="wrapper">
     <side-bar>
     <mobile-menu slot="content"></mobile-menu>
-    <sidebar-link to="">
+    <sidebar-link to="/map">
         <i class="fa fa-dashboard"></i>
         <!-- <i class="nc-icon nc-chart-pie-35"></i> -->
         <p>Dashboard</p>
