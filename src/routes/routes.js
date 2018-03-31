@@ -13,6 +13,7 @@ import Notifications from 'src/components/Dashboard/Views/Notifications.vue'
 import GreenhousePage from 'src/components/GreenhousePage'
 import OverviewPage from 'src/components/OverviewPage'
 import MapPage from 'src/components/Dashboard/Views/Maps.vue'
+import ActionPage from 'src/components/ActionPage'
 
 const routes = [
   {
@@ -40,6 +41,18 @@ const routes = [
         path: 'overview',
         name: 'Overview',
         component: OverviewPage
+      }
+    ]
+  },
+  {
+    path: '/control',
+    component: DashboardLayout,
+    children: [
+      {
+        name: 'actions',
+        path: 'actions',
+        component: DashboardLayout,
+        component: ActionPage
       }
     ]
   },

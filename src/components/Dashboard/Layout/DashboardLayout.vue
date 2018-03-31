@@ -4,7 +4,6 @@
     <mobile-menu slot="content"></mobile-menu>
     <sidebar-link to="/map">
         <i class="fa fa-dashboard"></i>
-        <!-- <i class="nc-icon nc-chart-pie-35"></i> -->
         <p>Dashboard</p>
     </sidebar-link>
 
@@ -15,6 +14,10 @@
     <sidebar-link to="/admin/overview">
       <i class="nc-icon nc-settings-tool-66"></i>
       <p>Engineer</p>
+    </sidebar-link>
+    <sidebar-link to="/control/actions">
+      <i class="fa fa-exchange"></i>
+      <p>Actions</p>
     </sidebar-link>
 
 
