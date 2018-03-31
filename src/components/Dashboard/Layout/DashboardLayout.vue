@@ -17,6 +17,10 @@
       <p>Engineer</p>
     </sidebar-link>
 
+    <sidebar-link to="/weather">
+      <i class="nc-icon nc-sun-fog-29"></i>
+      <p>Weather</p>
+    </sidebar-link>
 
 <!--       <sidebar-link to="/admin/user">
         <i class="nc-icon nc-circle-09"></i>
