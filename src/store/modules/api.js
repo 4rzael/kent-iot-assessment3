@@ -131,6 +131,8 @@ const actions = {
 
 
         apiStore.commit(types.SET_MEASUREMENTS, {deviceId, measurementType, measurementRate, measurements})
+
+        updateUnusualMeasurements(apiStore, measurements, {deviceId, measurementType, measurementRate})
       } else {
         console.error('Error while getting measurements', res)
       }
@@ -169,38 +171,41 @@ const actions = {
             max: measurement.max || measurement.value
           }))
 
-        var sum = 0;
-        for (var i = 0; i < measurements.length; i++) {
-          sum += parseFloat( measurements[i]['value'] );
-        }
-
-        var avg = sum / measurements.length;
-
-        var standardDeviation = 0;
-        for (var i = 0; i < measurements.length; i++) {
-          standardDeviation += Math.pow( parseFloat( measurements[i]['value'] ) - avg, 2 );
-        }
-        standardDeviation = Math.sqrt(standardDeviation / measurements.length);
-
-        var unusualMeasurements = [];
-        const minUsualValue = avg - standardDeviation;
-        const maxUsualValue = avg + standardDeviation;
-
-        for (var i = 0; i < measurements.length; i++) {
-          const value =  parseFloat( measurements[i]['value'] );
-          if (value < minUsualValue || value > maxUsualValue) {
-            unusualMeasurements.push(measurements[i]);
-          }
-        }
-
-        console.log(unusualMeasurements);
-
-        apiStore.commit(types.SET_UNUSUAL_MEASUREMENTS, {deviceId, measurementType, measurementRate, unusualMeasurements})
       } else {
         console.error('Error while getting measurements', res)
       }
     }
   )
+}
+
+function updateUnusualMeasurements (apiStore, measurements, {deviceId, measurementType, measurementRate}) {
+  var sum = 0;
+  for (var i = 0; i < measurements.length; i++) {
+    sum += parseFloat( measurements[i]['value'] );
+  }
+
+  var avg = sum / measurements.length;
+
+  var standardDeviation = 0;
+  for (var i = 0; i < measurements.length; i++) {
+    standardDeviation += Math.pow( parseFloat( measurements[i]['value'] ) - avg, 2 );
+  }
+  standardDeviation = Math.sqrt(standardDeviation / measurements.length);
+
+  var unusualMeasurements = [];
+  const minUsualValue = avg - standardDeviation;
+  const maxUsualValue = avg + standardDeviation;
+
+  for (var i = 0; i < measurements.length; i++) {
+    const value =  parseFloat( measurements[i]['value'] );
+    if (value < minUsualValue || value > maxUsualValue) {
+      unusualMeasurements.push(measurements[i]);
+    }
+  }
+
+  // console.log(unusualMeasurements);
+
+  apiStore.commit(types.SET_UNUSUAL_MEASUREMENTS, {deviceId, measurementType, measurementRate, unusualMeasurements})
 }
 
 const getters = {
