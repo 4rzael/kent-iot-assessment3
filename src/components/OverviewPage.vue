@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-left: 25px">
     <h1>Devices Overview</h1>
     <div class="row">
           <b-card :header="'<i class=\'fa fa-microchip pull-left nomargin\'></i>' + dev"
@@ -15,7 +15,8 @@
   import device from "@/components/Device"
   import 'bootstrap/dist/css/bootstrap.css'
   import 'bootstrap-vue/dist/bootstrap-vue.css'
-   export default {
+
+  export default {
     name: 'OverviewPage',
     computed: {
       devices () {
@@ -30,19 +31,20 @@
     }
   }
 </script>
-<style>
-.card {
-  margin: 5px;
-}
-.card:hover {
-  background-color: #cecece;
-}
-.card .card-header {
-  background-color: #cecece;
-}
 
-.card .card-title {
-  margin: 5px;
-  margin-top: 0px;
-}
+<style>
+  .card {
+    margin: 5px;
+  }
+  .card:hover {
+    background-color: #ececec;
+  }
+  .card .card-header {
+    background-color: #ececec;
+  }
+
+  .card .card-title {
+    margin: 5px;
+    margin-top: 0px;
+  }
 </style>
