@@ -133,6 +133,7 @@ const actions = {
         apiStore.commit(types.SET_MEASUREMENTS, {deviceId, measurementType, measurementRate, measurements})
 
         updateUnusualMeasurements(apiStore, measurements, {deviceId, measurementType, measurementRate})
+        detectDangerousValues(apiStore, measurements, {deviceId, measurementType, measurementRate})
       } else {
         console.error('Error while getting measurements', res)
       }
@@ -206,6 +207,36 @@ function updateUnusualMeasurements (apiStore, measurements, {deviceId, measureme
   // console.log(unusualMeasurements);
 
   apiStore.commit(types.SET_UNUSUAL_MEASUREMENTS, {deviceId, measurementType, measurementRate, unusualMeasurements})
+}
+
+async function detectDangerousValues(apiStore, measurements, {deviceId, measurementType}) {
+  // get greenhouse
+  if (apiStore.state.preciseDevices[deviceId] === undefined) {
+    await apiStore.dispatch('retrievePreciseDevice', deviceId)
+  }
+  const greenhouseId = apiStore.state.preciseDevices[deviceId].site
+  const greenhouse = apiStore.state.sites.find(gh => gh.id === greenhouseId)
+
+  // get limits
+  if (greenhouse && apiStore.state.greenhousesLimits[greenhouseId] &&
+      apiStore.state.greenhousesLimits[greenhouseId][measurementType]) {
+    const limits = apiStore.state.greenhousesLimits[greenhouseId][measurementType]
+    const isOk = (measurement) => measurement.value > limits.max && measurement.value < limits.min
+
+    // detect the OK/KO changes (fronts)
+    const fronts = measurements.reduce((a, b) =>
+      (a.length === 0 || (isOk(a[a.length - 1]) !== isOk(b)))
+      ? a.concat(b)
+      : a, [])
+
+    // make notifications from the OK->KO fronts
+    fronts.filter(m => !isOk(m)).forEach(measurement => {
+      apiStore.dispatch('postNotification', {
+        message: `${greenhouse.name}: ${measurementType}: Critical value (too ${measurement.value > limits.max ? 'high' : 'low'})`,
+        date: measurement.time
+      })
+    })
+  }
 }
 
 const getters = {
