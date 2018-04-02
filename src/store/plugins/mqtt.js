@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-export const MQTT_SERVER = 'ws://test.mosquitto.org:8080'
+export const MQTT_SERVER = 'ws://iot.4rzael.com:9001'
 export const MQTT_TOPIC = 'presence42'
 export const MQTT_EXPECTED_MESSAGE = '[+] Microcontroller finished: '
 
@@ -10,14 +10,10 @@ const module = {
   },
   mutations: {
     saveMessage (state, message) {
-      // STORE IF message BEGINS WITH [+] Microcontroller finished...
-      // if (message.toString().startsWith(MQTT_EXPECTED_MESSAGE)) {
+      if (message.toString().startsWith(MQTT_EXPECTED_MESSAGE)) {
         console.log("[*] Saving '" + message.toString() + "' to store");
         state.messages.push(message.toString());
-      // }
-      // else {
-      //   console.log("[*] Received '" + message.toString() + "' but not saving");
-      // }
+      }
     }
   },
   actions: {
