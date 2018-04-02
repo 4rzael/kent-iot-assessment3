@@ -12,12 +12,18 @@
 </template>
 
 <script>
-import VueWeatherWidget from 'vue-weather-widget';
-import 'vue-weather-widget/dist/css/vue-weather-widget.css';
+  import VueWeatherWidget from 'vue-weather-widget';
+  import 'vue-weather-widget/dist/css/vue-weather-widget.css';
 
-export default {
-    components: {
-        'weather': VueWeatherWidget
-    },
-}
+  export default {
+      components: {
+          'weather': VueWeatherWidget
+      },
+  }
 </script>
+
+<style>
+  .fe_container {
+    min-height: calc(100vh - 123px);
+  }
+</style>
