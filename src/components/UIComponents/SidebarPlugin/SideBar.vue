@@ -5,9 +5,9 @@
        :data-image="backgroundImage">
     <div class="sidebar-wrapper">
       <div class="logo">
-        <a href="#" class="simple-text">
+        <a style="text-transform:none"  href="#" class="simple-text">
             <div class="logo-img">
-                <img src="static/img/vue-logo.png" alt="">
+                <img src="static/img/K-logo.png" alt="">
             </div>
           {{title}}
         </a>
@@ -40,7 +40,7 @@
     props: {
       title: {
         type: String,
-        default: 'Vue LBD'
+        default: 'IoT 3'
       },
       backgroundColor: {
         type: String,
