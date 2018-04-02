@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-left: 25px; margin-top: 10px; width: 45%">
+    <div style="margin-left: 25px; margin-top: 10px;">
         <weather
             api-key="e3b9aba95a64dc7d97f3d54f2142554c"
             title="Canterbury"
@@ -25,5 +25,6 @@
 <style>
   .fe_container {
     min-height: calc(100vh - 123px);
+    max-width: 100%;
   }
 </style>
