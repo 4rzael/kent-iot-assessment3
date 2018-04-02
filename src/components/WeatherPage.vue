@@ -1,7 +1,6 @@
 <template>
-    <div>
-        <h1></h1>
-        <weather 
+    <div style="margin-left: 25px; margin-top: 10px; width: 45%">
+        <weather
             api-key="e3b9aba95a64dc7d97f3d54f2142554c"
             title="Canterbury"
             latitude="51.280233"
@@ -21,4 +20,4 @@ export default {
         'weather': VueWeatherWidget
     },
 }
-</script> 
+</script>
