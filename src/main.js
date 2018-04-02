@@ -17,11 +17,15 @@ import LightBootstrap from './light-bootstrap-main'
 // router setup
 import routes from './routes/routes'
 
+import VueNotify from 'vue-notifyjs'
+import 'vue-notifyjs/themes/default.css'
+
 // plugin setup
 Vue.use(VueRouter)
 Vue.use(LightBootstrap)
 Vue.use(BootstrapVue)
 Vue.use(VueAxios, axios)
+Vue.use(VueNotify)
 
 // configure router
 const router = new VueRouter({
