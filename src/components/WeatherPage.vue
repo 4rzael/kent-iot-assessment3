@@ -1,7 +1,6 @@
 <template>
-    <div>
-        <h1></h1>
-        <weather 
+    <div style="margin-left: 25px; margin-top: 10px; width: 45%">
+        <weather
             api-key="e3b9aba95a64dc7d97f3d54f2142554c"
             title="Canterbury"
             latitude="51.280233"
@@ -13,12 +12,18 @@
 </template>
 
 <script>
-import VueWeatherWidget from 'vue-weather-widget';
-import 'vue-weather-widget/dist/css/vue-weather-widget.css';
+  import VueWeatherWidget from 'vue-weather-widget';
+  import 'vue-weather-widget/dist/css/vue-weather-widget.css';
 
-export default {
-    components: {
-        'weather': VueWeatherWidget
-    },
-}
-</script> 
+  export default {
+      components: {
+          'weather': VueWeatherWidget
+      },
+  }
+</script>
+
+<style>
+  .fe_container {
+    min-height: calc(100vh - 123px);
+  }
+</style>

@@ -2,81 +2,126 @@
   <div style="margin-left: 25px">
     <h1>Actions</h1>
     <p>(TO DELETE) LAST MESSAGES: {{LastMessages}}</p>
-    <div class="row" v-for="Section in actionsData">
-    <b-card-group deck>
-      <b-card v-for="element in  Section.actions"
-              :key="element.name"
-              :header="Section.section_name"
-              header-tag="header"
-              :img-src="element.values.url"
-              img-alt="element.name"
-              img-top
-              tag="article"
-              style="max-width: 20rem;"
-              class="mb-2">
-          <p class="card-text">
-            {{element.values.msg}}
-          </p>
-        <b-button @click="sendMQTT(element.values.command)" variant="primary">
-          {{element.name}}
-        </b-button>
-      </b-card>
-    </b-card-group>
+    <div class="row">
+      <card v-for="element in actionsData"
+              :key="element.name">
+        <div slot="header">
+          <img class="img_style" style="float: left;" :src="element.values.url" :alt="element.name">
+          <h4 style="float: right;">{{element.section_name}}</h4>
+        </div>
+        <action :element="element"></action>
+        <div style="width: 100%;"  class="stats col-xs-12" slot="footer">
+          <b-form-select style="max-width: 49%; cursor: pointer;" v-model="element.values.selected" :options="selectOptions" class="mb-3" />
+          <b-button style="max-width: 49%; float: right; padding-bottom: 3px;" @click="sendMQTT(element.values.command, element.values.selected)" variant="primary" v-tooltip.bottom="'Send action'">
+            {{element.name}}
+          </b-button>
+        </div>
+      </card>
+    </div>
   </div>
-</div>
 </template>
-
 <script>
   import {sendClient, subscribe} from '../store/plugins/mqtt'
-
   export const MQTT_TOPIC = 'presence42'
+  import Action from "@/components/Action"
+  import Card from 'src/components/UIComponents/Cards/Card.vue'
+  import VTooltip from 'v-tooltip'
 
   export default {
     name: 'ActionPage',
-    data() {
+    components: {
+      Card,
+      Action
+    },
+    data: function() {
       return {
-      actionsData: [{section_name: 'Temperature',
-                          actions: [{
-                                name: 'Heat up',
-                                values: {msg: 'Heat up the place',
-                                url: 'https://www.river1467.com.au/images/2017/11/FIREA.jpg',
-                                command: 'temp_up'}
-                            },
-                            {
-                                name: 'Cool down',
-                                values: {msg: 'Cool down place',
-                                url: 'https://in8life.com/wp-content/uploads/2016/07/three-ice-cubes.jpg',
-                                command: 'temp_down'}
-                              }],
-                  },
-                  {section_name: 'Nutriments',
-                                      actions: [{
-                                            name: 'Nutriments Up',
-                                            values: {msg: 'Putting more nutriments to the plants',
-                                            url: 'https://www.um.edu.mt/think/wp-content/uploads/2014/03/green-chemistry-glassware_shutterstock_80851456.jpg',
-                                            command: 'nutriments_up'}
-                                        },
-                                        {
-                                            name: 'Nutriments down',
-                                            values: {msg: 'Nutriments down',
-                                            url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlx-wWUxq5umkxwNIrc7tAGxbNwM5HgRGCfsRWttcwp5U4Ivzy',
-                                            command: 'nutriments_down'}
-                                          }],
-                              },
-
-                    ]
-      };
+        selectOptions: [{
+          text: 'Please select',
+          value: null,
+        }],
+      actionsData: [{
+          section_name: 'Temperature',
+          name: 'Heat up',
+          values: {
+            msg: 'Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place ',
+            url: 'https://www.river1467.com.au/images/2017/11/FIREA.jpg',
+            command: 'temp_up',
+            selected: null
+          }
+        },
+        {
+          section_name: 'Temperature',
+          name: 'Cool down',
+          values: {
+            msg: 'Cool down place',
+            url: 'https://in8life.com/wp-content/uploads/2016/07/three-ice-cubes.jpg',
+            command: 'temp_down',
+            selected: null
+          }
+        },
+        {
+          section_name: 'Nutriments',
+          name: 'Nutriments up',
+          values: {
+            msg: 'This action adds some nutriments to the plant',
+            url: 'https://www.um.edu.mt/think/wp-content/uploads/2014/03/green-chemistry-glassware_shutterstock_80851456.jpg',
+            command: 'temp_up',
+            selected: null
+          }
+        },
+        {
+          section_name: 'Nutriments',
+          name: 'Nutriments down',
+          values: {
+            msg: 'An action that reduces the nutriments of the plant',
+            url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlx-wWUxq5umkxwNIrc7tAGxbNwM5HgRGCfsRWttcwp5U4Ivzy',
+            command: 'temp_down',
+            selected: null
+          }
+        }]
+      }
     },
     computed: {
       LastMessages () {
-        const lastMessages = this.$store.getters.getMessages()
-        return lastMessages
-      }
+        return this.$store.getters.getMessages()
+      },
+      devices () {
+        return this.$store.state.api.devices.map((device, index) => ({
+                                                value: index, text: device}))
+      },
+    },
+    mounted: async function () {
+      await this.$store.dispatch('retrieveDevices'),
+      this.selectOptions = this.selectOptions.concat(this.devices);
     },
     methods: {
-      sendMQTT (command_name) {
-        console.log("[*] Sending to client '" + command_name + "' via mqtt");
-        sendClient(MQTT_TOPIC, command_name);
+      notifyMesg (mesg, type) {
+        const notification = {
+          template: '<h6>[*] Sending \'' + mesg + '\' to microcontroller</h6>'
+        }
+        this.$notify(
+          {
+            component: notification,
+            icon: 'fa fa-exchange',
+            horizontalAlign: 'right',
+            verticalAlign: 'top',
+            type
+          }
+        )
+      },
+      sendMQTT (commandName, selectedItem) {
+        if (selectedItem != null) {
+          console.log("selectedItem: ", selectedItem);
+          console.log("this.selectOptions: ", this.selectOptions[selectedItem + 1].value);
+          console.log("this.selectOptions: ", this.selectOptions[selectedItem + 1].text);
+          const greenhouse = this.selectOptions[selectedItem + 1].text;
+          // const opt = this.selectOptions.__proto__.__proto__
+          // const greenhouse = opt.find(element => element.value === selectedItem).text
+          console.log(`[*] Sending to client '${commandName}' to '${greenhouse}' via mqtt`);
+          const cmd = `${commandName}::${greenhouse}`
+          this.notifyMesg(cmd, 'info');
+          sendClient(MQTT_TOPIC, cmd);
+        }
       }
     },
     mounted() {
@@ -86,25 +131,38 @@
 </script>
 
 <style>
-.card {
-  margin: 5px;
-}
-.card:hover {
-  background-color: #ececec;
-}
-.card .card-header {
-  background-color: #ececec;
-}
+  .card {
+    margin: 5px;
+  }
+  .card:hover {
+    background-color: #ececec;
+  }
+  .card .card-header {
+    background-color: #ececec;
+  }
 
-.card .card-title {
-  margin: 5px;
-  margin-top: 0px;
-}
+  .card .card-footer {
+    padding-left: 5px;
+    padding-right: 5px
+  }
 
-img {
-  display: block;
-  max-block-size: 50%;
-  width: auto;
-  height: auto;
-}
+  .card .card-title {
+    margin: 5px;
+    margin-top: 0px;
+  }
+
+  button {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .img_style {
+    float: left;
+    margin-bottom: 15px;
+    display: block;
+    max-block-size: 50%;
+    width: auto;
+    height: 80px;
+  }
 </style>
