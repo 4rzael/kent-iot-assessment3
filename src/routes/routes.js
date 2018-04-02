@@ -33,6 +33,16 @@ const routes = [
         component: MapPage
       },
       {
+        path: 'overview',
+        name: 'Overview',
+        component: OverviewPage
+      },
+      {
+        path: 'actions',
+        name: 'Actions',
+        component: ActionPage
+      },
+      {
         path: 'weather',
         name: 'Weather',
         component: WeatherPage
@@ -40,40 +50,10 @@ const routes = [
     ]
   },
   {
-    path: '/admin',
-    component: DashboardLayout,
-    children: [
-      {
-        path: 'overview',
-        name: 'Overview',
-        component: OverviewPage
-      }
-    ]
-  },
-  {
-    path: '/control',
-    component: DashboardLayout,
-    children: [
-      {
-        name: 'actions',
-        path: 'actions',
-        component: DashboardLayout,
-        component: ActionPage
-      }
-    ]
-  },
-  // {
-  //   path: '/farmer',
-  //   redirect: '/',
-  //   children: [
-  //     {
-  //       path: '/greenhouse/:id',
-  //       name: 'Greenhouse',
-  //       component: GreenhousePage
-  //     }
-  //   ]
-  // },
-  { path: '*', component: DashboardLayout }
+    path: '*',
+    redirect: '/map',
+    component: DashboardLayout
+  }
 ]
 
 /**

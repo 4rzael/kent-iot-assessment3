@@ -11,11 +11,11 @@
       <i class="nc-icon nc-bank"></i>
       <p>{{site.name}}</p>
     </sidebar-link>
-    <sidebar-link to="/admin/overview">
+    <sidebar-link to="/overview">
       <i class="nc-icon nc-settings-tool-66"></i>
       <p>Engineer</p>
     </sidebar-link>
-    <sidebar-link to="/control/actions">
+    <sidebar-link to="/actions">
       <i class="fa fa-exchange"></i>
       <p>Actions</p>
     </sidebar-link>
@@ -53,8 +53,8 @@
     <div class="main-panel">
       <top-navbar></top-navbar>
 
-      <dashboard-content @click="toggleSidebar">
-      </dashboard-content>
+        <dashboard-content @click="toggleSidebar">
+        </dashboard-content>
 
       <content-footer></content-footer>
     </div>
