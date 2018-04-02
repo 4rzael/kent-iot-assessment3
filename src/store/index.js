@@ -1,20 +1,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {cachePlugin} from '../store/plugins/cache'
-import {mqttPlugin} from '../store/plugins/mqtt'
+import {cachePlugin} from './plugins/cache'
+import {mqttPlugin} from './plugins/mqtt'
+import {notificationsPlugin} from './plugins/notifications'
 import * as types from './mutation-types'
 
 import api from './modules/api'
-import notifications from './modules/notifications'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
-  plugins: [cachePlugin, mqttPlugin],
+  plugins: [cachePlugin, mqttPlugin, notificationsPlugin],
   modules: {
-    api,
-    notifications
+    api
   }
 })
 

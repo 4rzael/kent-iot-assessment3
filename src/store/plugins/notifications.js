@@ -3,10 +3,12 @@ import axios from 'axios'
 import Vue from 'vue'
 
 import cache from '../plugins/cache'
+import { subscribe } from '../plugins/mqtt'
 
 import * as measurementRates from '../../utils/measurementRates'
 import * as measurementTypes from '../../utils/measurementTypes'
 
+const MODULE_NAME = 'notifications'
 const API_HOST = 'http://iot.4rzael.com:3000'
 
 const state = {
@@ -36,46 +38,65 @@ const mutations = {
 
 const actions = {
   retrieveNotifications: cache('retrieveNotifications',
-    async function (apiStore) {
+    async function (notifStore) {
       const res = await axios.get(API_HOST)
       const notifs = res.data
       if (notifs !== undefined) {
-        apiStore.commit(types.SET_NOTIFICATIONS, notifs)
+        notifStore.commit(types.SET_NOTIFICATIONS, notifs)
       } else {
         console.error('Error while getting notifications', res)
       }
     }
   ),
-  readNotification: async function (apiStore, notif) {
+  readNotification: async function (notifStore, notif) {
     const res = await axios.put(`${API_HOST}/${notif._id}/read`)
     const updatedNotif = res.data
     if (updatedNotif !== undefined) {
-      apiStore.commit(types.EDIT_NOTIFICATION, updatedNotif)
+      notifStore.commit(types.EDIT_NOTIFICATION, updatedNotif)
     } else {
       console.error('Error while reading notification', res)
     }
   },
-  deleteNotification: async function (apiStore, notif) {
+  deleteNotification: async function (notifStore, notif) {
     const res = await axios.delete(`${API_HOST}/${notif._id}`)
-    apiStore.commit(types.DELETE_NOTIFICATION, notif)
+    notifStore.commit(types.DELETE_NOTIFICATION, notif)
   },
-  postNotification: async function (apiStore, {message, date}) {
-    console.log('post', apiStore)
+  postNotification: async function (notifStore, {message, date}) {
     const notif = {
       message,
       date: date || new Date()
     }
 
     await axios.post(API_HOST, notif)
+  },
+  addNotification: async function (notifStore, notif) {
+    notifStore.commit(types.ADD_NOTIFICATION, notif)
   }
 }
 
 const getters = {
 }
 
-export default {
+const module = {
   state,
   mutations,
   actions,
   getters
 }
+
+export const notificationsPlugin = function (store) {
+  store.registerModule(MODULE_NAME, module)
+  subscribe('/notifications')
+
+  store.subscribe(({type, payload}) => {
+    const {topic, message} = payload
+
+    if (type === 'saveMessage' && topic === '/notifications') {
+      const notif = JSON.parse(message.toString())
+
+      store.dispatch('addNotification', notif)
+    }
+  })
+}
+
+export default notificationsPlugin

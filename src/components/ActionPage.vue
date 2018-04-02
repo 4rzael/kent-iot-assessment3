@@ -27,7 +27,9 @@
 </template>
 
 <script>
-  import {sendClient} from '../store/plugins/mqtt'
+  import {sendClient, subscribe} from '../store/plugins/mqtt'
+
+  export const MQTT_TOPIC = 'presence42'
 
   export default {
     name: 'ActionPage',
@@ -74,8 +76,11 @@
     methods: {
       sendMQTT (command_name) {
         console.log("[*] Sending to client '" + command_name + "' via mqtt");
-        sendClient(command_name);
+        sendClient(MQTT_TOPIC, command_name);
       }
+    },
+    mounted() {
+      subscribe(MQTT_TOPIC)
     }
   }
 </script>

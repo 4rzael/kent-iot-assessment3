@@ -18,20 +18,18 @@ export default {
       return this.$store.state.api.sites
         .find(site => site.id === this.$store.state.route.params.id)
     },
-    beforeCreate () {
-      console.log("beforeCreate");
-    },
-
     zoneIds () {
-      return this.greenhouse !== undefined
+      return ((this.greenhouse !== undefined)
         ? this.greenhouse.zones.map(z => z.id)
-        : []
+        : [])
     },
 
     devices () {
-      return Object.values(this.$store.state.api.preciseDevices)
-        .filter(device => device.site === this.greenhouse.id)
-        .filter(device => this.zoneIds.includes(device.zone))
+      return ((this.greenhouse !== undefined)
+        ? Object.values(this.$store.state.api.preciseDevices)
+          .filter(device => device.site === this.greenhouse.id)
+          .filter(device => this.zoneIds.includes(device.zone))
+        : [])
     },
 
     graphs () {

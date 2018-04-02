@@ -70,6 +70,8 @@
   import MobileMenu from './MobileMenu.vue'
   import { mapState } from 'vuex'
 
+  import * as types from '../../../store/mutation-types'
+
   export default {
     components: {
       TopNavbar,
@@ -89,6 +91,13 @@
     },
     mounted () {
       this.$store.dispatch('retrieveSites')
+
+      this.$store.subscribe(({type, payload}) => {
+        if (type === types.ADD_NOTIFICATION) {
+          const notif = payload
+          this.$notify(notif)
+        }
+      })
     }
   }
 
