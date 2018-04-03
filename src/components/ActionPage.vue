@@ -21,7 +21,8 @@
   </div>
 </template>
 <script>
-  import {sendClient} from '../store/plugins/mqtt'
+  import {sendClient, subscribe} from '../store/plugins/mqtt'
+  export const MQTT_TOPIC = 'presence42'
   import Action from "@/components/Action"
   import Card from 'src/components/UIComponents/Cards/Card.vue'
   import VTooltip from 'v-tooltip'
@@ -101,7 +102,8 @@
     },
     mounted: async function () {
       await this.$store.dispatch('retrieveDevices'),
-      this.selectOptions = this.selectOptions.concat(this.devices);
+      this.selectOptions = this.selectOptions.concat(this.devices),
+      subscribe(MQTT_TOPIC)
     },
     methods: {
       notifyMesg (mesg, type) {
@@ -127,10 +129,12 @@
           console.log(`[*] Sending to client '${commandName}' to '${greenhouse}' via mqtt`);
           const cmd = `${commandName}::${greenhouse}`
           this.notifyMesg(cmd, 'info');
-          sendClient(cmd);
+          sendClient(MQTT_TOPIC, cmd);
         }
       }
-    }
+    },
+    // mounted() {
+    // }
   }
 </script>
 
