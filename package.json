@@ -10,7 +10,8 @@
     "build": "cross-env ENABLE_ESLINT=true node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
-    "lint": "eslint --ext .js,.vue src test/unit/specs"
+    "lint": "eslint --ext .js,.vue src test/unit/specs",
+    "deploy": "npm run build; push-dir --dir=dist --branch=gh-pages --cleanup --overwrite-local"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -85,6 +86,7 @@
     "optimize-css-assets-webpack-plugin": "^2.0.0",
     "ora": "^1.2.0",
     "phantomjs-prebuilt": "^2.1.14",
+    "push-dir": "^0.4.1",
     "rimraf": "^2.6.0",
     "sass-loader": "^6.0.6",
     "semver": "^5.3.0",
