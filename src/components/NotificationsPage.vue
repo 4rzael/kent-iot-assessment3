@@ -4,7 +4,7 @@
     <p style="font-size: larger">This page is a page dedicated both to engineers and farmers.
       It's purpose is...</p>
 
-    <l-table class="table table-hover table-striped" :columns="tableColumns" :data="tableData">
+    <l-table class="table table-hover table-striped" :columns="tableColumns" :data="notifs">
       <template slot="columns">
           <th><i class="fa fa-calendar"></i>Date</th>
           <th><i class="fa fa-exclamation-triangle"></i>Notification</th>
@@ -34,7 +34,6 @@
       return {
         tableColumns: ['date', 'description', 'action'],
         babar: 42,
-        tableData: []
         }
       },
     computed: {
@@ -60,8 +59,7 @@
       }
     },
     mounted () {
-      this.$store.dispatch('retrieveNotifications'),
-      this.tableData = this.notifs
+      this.$store.dispatch('retrieveNotifications')
     }
   }
 
