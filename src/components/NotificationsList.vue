@@ -9,7 +9,7 @@
     <div v-for="notif in notifs" :key="notif._id" :class="{'notif-body': true, read: notif.read}">
       <!-- <a style="float:left" href="#" :class="{ read: notif.read }" @click="readNotification(notif)">{{notif.message}}</a> -->
       <!-- <a style="float:right"><i :class="{ read: notif.read, 'nc-icon': true, 'nc-simple-remove': true }" @click="deleteNotification(notif)"></i></a> -->
-      <a class="notif-text" href="/notifications" @click="readNotification(notif)">{{notif.message}}</a>
+      <a class="notif-text" href="/#/notifications" @click="readNotification(notif)">{{notif.message}}</a>
       <a class="notif-x"><i style="cursor:pointer;" class="nc-icon nc-simple-remove" @click="deleteNotification(notif)"></i></a>
       <span class="notif-date">{{notifDate(notif)}}</span>
       <a class="notif-read" href="#" @click="readNotification(notif)">read</a>
