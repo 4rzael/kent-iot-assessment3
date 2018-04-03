@@ -210,7 +210,9 @@ async function detectDangerousValues(apiStore, measurements, {deviceId, measurem
     fronts.filter(m => !isOk(m)).forEach(measurement => {
       apiStore.dispatch('postNotification', {
         message: `${greenhouse.name}: ${measurementType}: Critical value (too ${measurement.value > limits.max ? 'high' : 'low'})`,
-        date: measurement.time
+        date: measurement.time,
+        type: 'danger',
+        category: `${greenhouse.id}/${measurementType}`
       })
     })
   }
