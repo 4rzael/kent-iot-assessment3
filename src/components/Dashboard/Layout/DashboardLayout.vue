@@ -19,6 +19,10 @@
       <i class="fa fa-exchange"></i>
       <p>Actions</p>
     </sidebar-link>
+    <sidebar-link to="/notifications">
+      <i class="fa fa-exclamation-triangle"></i>
+      <p>Notifications</p>
+    </sidebar-link>
 
     <sidebar-link to="/weather">
       <i class="nc-icon nc-sun-fog-29"></i>
