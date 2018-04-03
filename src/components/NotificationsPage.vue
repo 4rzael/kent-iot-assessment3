@@ -11,7 +11,7 @@
           <th><i class="fa fa-bolt"></i>Action</th>
       </template>
       <template slot-scope="{row}">
-        <td style="font-size: smaller">{{row.date}}</td>
+        <td style="font-size: smaller">{{prettyDate(row.date)}}</td>
         <td><b>{{row.message}}</b></td>
         <td>
           <button class="btn btn-icon btn-info" @click="readNotification(row)"><i class="fa fa-eye"></i></button>
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+  import moment from 'moment'
   import LTable from 'src/components/UIComponents/Table.vue'
 
   export default {
@@ -52,6 +53,10 @@
       },
       deleteNotification (notif) {
         this.$store.dispatch('deleteNotification', notif)
+      },
+      prettyDate (date) {
+        const m = moment(date)
+        return `${m.format('ddd, MMM Do YYYY, k:mm')} (${m.fromNow()})`
       }
     },
     mounted () {
