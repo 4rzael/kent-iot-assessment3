@@ -198,13 +198,15 @@ async function detectDangerousValues(apiStore, measurements, {deviceId, measurem
   if (greenhouse && apiStore.state.greenhousesLimits[greenhouseId] &&
       apiStore.state.greenhousesLimits[greenhouseId][measurementType]) {
     const limits = apiStore.state.greenhousesLimits[greenhouseId][measurementType]
-    const isOk = (measurement) => measurement.value > limits.max && measurement.value < limits.min
+    const isOk = (measurement) => ((measurement.value <= limits.max) && (measurement.value >= limits.min))
 
     // detect the OK/KO changes (fronts)
     const fronts = measurements.reduce((a, b) =>
       (a.length === 0 || (isOk(a[a.length - 1]) !== isOk(b)))
       ? a.concat(b)
       : a, [])
+
+    console.log('fronts', deviceId, measurementType, fronts)
 
     // make notifications from the OK->KO fronts
     fronts.filter(m => !isOk(m)).forEach(measurement => {
