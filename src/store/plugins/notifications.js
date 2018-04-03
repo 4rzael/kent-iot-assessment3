@@ -88,7 +88,7 @@ const module = {
 
 export const notificationsPlugin = function (store) {
   store.registerModule(MODULE_NAME, module)
-  subscribe('/notifications')
+  subscribe('/notifications', {qos:2})
 
   store.subscribe(({type, payload}) => {
     const {topic, message} = payload

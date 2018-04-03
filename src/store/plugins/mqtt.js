@@ -42,12 +42,12 @@ export const sendClient = function (topic, mesg, options) {
 
 const toSubscribe = []
 const subscribed = []
-export const subscribe = function (topic) {
+export const subscribe = function (topic, options) {
   if (!client) {
-    toSubscribe.push(topic)
+    toSubscribe.push({topic, options})
   } else if (subscribed.indexOf(topic) < 0) {
     console.log('Subscribing to the topic', topic)
-    client.subscribe(topic)
+    client.subscribe(topic, options)
     subscribed.push(topic)
   }
 }
@@ -55,7 +55,7 @@ export const subscribe = function (topic) {
 export const mqttPlugin = function (store) {
   const mqtt = require('mqtt')
   client = mqtt.connect(MQTT_SERVER);
-  toSubscribe.forEach(topic => subscribe(topic))
+  toSubscribe.forEach(({topic, options}) => subscribe(topic, options))
 
   client.on('message', function (topic, message) {
     console.log(`[${topic}] Received '${message.toString()}'`)

@@ -11,12 +11,15 @@ export const initMixin = {
       this.$store.commit(CLEAR_KEY, 'retrieveDevices')
       this.$store.commit(CLEAR_KEY, 'retrieveMeasurements')
       this.$store.commit(CLEAR_KEY, 'retrieveLastMeasurement')
+      this.$store.commit(CLEAR_KEY, 'retrieveLastMeasurement')
+      this.$store.commit(CLEAR_KEY, 'retrieveNotifications')
     },
     loadEverything: async function () {
       // get devices and stores
       await Promise.all([
         this.$store.dispatch('retrieveSites'),
-        this.$store.dispatch('retrieveDevices')
+        this.$store.dispatch('retrieveDevices'),
+        this.$store.dispatch('retrieveNotifications')
       ])
 
       // then all measurements and battery levels
