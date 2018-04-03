@@ -18,8 +18,7 @@
         </gmap-marker>
       </gmap-map>
     </div>
-
-    <weather></weather>
+    <weather style="width: 45%"></weather>
   </div>
 </template>
 <script>

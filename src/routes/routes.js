@@ -15,6 +15,7 @@ import OverviewPage from 'src/components/OverviewPage'
 import MapPage from 'src/components/Dashboard/Views/Maps.vue'
 import WeatherPage from 'src/components/WeatherPage.vue'
 import ActionPage from 'src/components/ActionPage'
+import NotificationsPage from 'src/components/NotificationsPage'
 
 const routes = [
   {
@@ -41,6 +42,11 @@ const routes = [
         path: 'actions',
         name: 'Actions',
         component: ActionPage
+      },
+      {
+        path: 'notifications',
+        name: 'Notifications',
+        component: NotificationsPage
       },
       {
         path: 'weather',

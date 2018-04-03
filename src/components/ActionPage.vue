@@ -12,7 +12,7 @@
         <action :element="element"></action>
         <div style="width: 100%;"  class="stats col-xs-12" slot="footer">
           <b-form-select style="max-width: 49%; cursor: pointer;" v-model="element.values.selected" :options="selectOptions" class="mb-3" />
-          <b-button style="max-width: 49%; float: right; padding-bottom: 3px;" @click="sendMQTT(element.values.command, element.values.selected)" variant="primary" v-tooltip.bottom="'Send action'">
+          <b-button style="max-width: 49%; float: right; padding-bottom: 3px;" @click="sendMQTT(element.values.command, element.values.selected)" variant="primary" v-tooltip.bottom="'Send action \'' + element.name + '\''">
             {{element.name}}
           </b-button>
         </div>
@@ -36,7 +36,7 @@
     data: function() {
       return {
         selectOptions: [{
-          text: 'Please select',
+          text: 'Select site',
           value: null,
         }],
       actionsData: [{
@@ -65,7 +65,7 @@
           values: {
             msg: 'This action adds some nutriments to the plant',
             url: 'https://www.um.edu.mt/think/wp-content/uploads/2014/03/green-chemistry-glassware_shutterstock_80851456.jpg',
-            command: 'temp_up',
+            command: 'nutriments_up',
             selected: null
           }
         },
@@ -75,7 +75,17 @@
           values: {
             msg: 'An action that reduces the nutriments of the plant',
             url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlx-wWUxq5umkxwNIrc7tAGxbNwM5HgRGCfsRWttcwp5U4Ivzy',
-            command: 'temp_down',
+            command: 'nutriments_down',
+            selected: null
+          }
+        },
+        {
+          section_name: 'Watering',
+          name: 'Water plants',
+          values: {
+            msg: 'This action waters the plant. Watering the plants is important especially if ',
+            url: 'https://image.freepik.com/free-photo/water-background-with-splashes_23-2147608335.jpg',
+            command: 'water_plants',
             selected: null
           }
         }]
@@ -92,7 +102,8 @@
     },
     mounted: async function () {
       await this.$store.dispatch('retrieveDevices'),
-      this.selectOptions = this.selectOptions.concat(this.devices);
+      this.selectOptions = this.selectOptions.concat(this.devices),
+      subscribe(MQTT_TOPIC)
     },
     methods: {
       notifyMesg (mesg, type) {
@@ -115,8 +126,6 @@
           console.log("this.selectOptions: ", this.selectOptions[selectedItem + 1].value);
           console.log("this.selectOptions: ", this.selectOptions[selectedItem + 1].text);
           const greenhouse = this.selectOptions[selectedItem + 1].text;
-          // const opt = this.selectOptions.__proto__.__proto__
-          // const greenhouse = opt.find(element => element.value === selectedItem).text
           console.log(`[*] Sending to client '${commandName}' to '${greenhouse}' via mqtt`);
           const cmd = `${commandName}::${greenhouse}`
           this.notifyMesg(cmd, 'info');
@@ -124,9 +133,8 @@
         }
       }
     },
-    mounted() {
-      subscribe(MQTT_TOPIC)
-    }
+    // mounted() {
+    // }
   }
 </script>
 

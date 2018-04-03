@@ -13,14 +13,10 @@ const module = {
       if (state.messages[topic] === undefined) {
         Vue.set(state.messages, topic, [])
       }
-      // STORE IF message BEGINS WITH [+] Microcontroller finished...
-      // if (message.toString().startsWith(MQTT_EXPECTED_MESSAGE)) {
+      if (message.toString().startsWith(MQTT_EXPECTED_MESSAGE)) {
         console.log(`[*] Saving '${message.toString()}' to store`);
         state.messages[topic].push(message.toString());
-      // }
-      // else {
-      //   console.log("[*] Received '" + message.toString() + "' but not saving");
-      // }
+      }
     }
   },
   actions: {

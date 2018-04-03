@@ -1,10 +1,11 @@
 <template>
   <div style="margin-left: 25px">
     <h1>Devices Overview</h1>
+    <p style="font-size: larger">This page is dedicated for the engineers and ...</p>
     <div class="row">
           <b-card :header="'<i class=\'fa fa-microchip pull-left nomargin\'></i>' + dev"
                     header-tag="header"
-                    title="Status" v-for="dev in devices" :key="dev">
+                    v-for="dev in devices" :key="dev">
                 <device :deviceId="dev"></device>
             </b-card>
     </div>
