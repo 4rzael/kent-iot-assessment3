@@ -1,8 +1,20 @@
 <template>
   <div>
-    {{greenhouse.name}}
-    <div v-for="(graph, key) in graphs" :key="key">
-      <measure-graph :measurementType="key" :devicesIds="graph" :greenhouseId="greenhouse.id"></measure-graph>
+    <div style="text-align: center; font-size: 42px;">
+      {{greenhouse.name}}
+    </div>
+    <div>
+      <b-card-group deck style="margin: 10px">
+        <b-card class="text-center" v-for="(graph, key, id) in graphs" :key="key" v-if="id % 2">
+          <measure-graph :measurementType="key" :devicesIds="graph" :greenhouseId="greenhouse.id"></measure-graph>
+        </b-card>
+      </b-card-group>
+
+      <b-card-group deck style="margin: 10px">
+        <b-card class="text-center" v-for="(graph, key, id) in graphs" :key="key" v-if="!(id % 2)">
+          <measure-graph :measurementType="key" :devicesIds="graph" :greenhouseId="greenhouse.id"></measure-graph>
+        </b-card>
+      </b-card-group>
     </div>
   </div>
 </template>
