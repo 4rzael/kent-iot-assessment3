@@ -204,14 +204,14 @@ async function detectDangerousValues(apiStore, measurements, {deviceId, measurem
     const fronts = measurements.reduce((a, b) =>
       (a.length === 0 || (isOk(a[a.length - 1]) !== isOk(b)))
       ? a.concat(b)
-      : a, [])
+      : a, []).filter(m => !isOk(m))
 
-    console.log('fronts', deviceId, measurementType, fronts)
+    console.log('fronts', deviceId, measurementType, fronts, 'limits', limits)
 
     // make notifications from the OK->KO fronts
-    fronts.filter(m => !isOk(m)).forEach(measurement => {
+    fronts.forEach(measurement => {
       apiStore.dispatch('postNotification', {
-        message: `${greenhouse.name}: ${measurementType}: Critical value (too ${measurement.value > limits.max ? 'high' : 'low'})`,
+        message: `${greenhouse.name}: ${measurementType}: Critical value (too ${measurement.value > limits.max ? 'high' : (measurement.value < limits.min ? 'low' : 'normal')})`,
         date: measurement.time,
         type: 'danger',
         category: `${greenhouse.id}/${measurementType}`
