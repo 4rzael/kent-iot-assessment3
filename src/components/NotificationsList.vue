@@ -76,7 +76,10 @@
 
 .notif-read {
   float: right;
-  width: 25%
+  width: 15%;
+  font-size: 12px;
+  font-style: italic;
+  text-decoration: underline;
 }
 
 </style>

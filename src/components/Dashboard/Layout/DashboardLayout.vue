@@ -74,9 +74,10 @@
   import MobileMenu from './MobileMenu.vue'
   import { mapState } from 'vuex'
 
-  import * as types from '../../../store/mutation-types'
+  import initMixin from '../../../mixins/init'
 
   export default {
+    mixins: [initMixin],
     components: {
       TopNavbar,
       ContentFooter,
@@ -92,17 +93,17 @@
           this.$sidebar.displaySidebar(false)
         }
       }
-    },
-    mounted () {
-      this.$store.dispatch('retrieveSites')
-
-      this.$store.subscribe(({type, payload}) => {
-        if (type === types.ADD_NOTIFICATION) {
-          const notif = payload
-          this.$notify(notif)
-        }
-      })
     }
+    // mounted () {
+    //   this.$store.dispatch('retrieveSites')
+    //
+    //   this.$store.subscribe(({type, payload}) => {
+    //     if (type === types.ADD_NOTIFICATION) {
+    //       const notif = payload
+    //       this.$notify(notif)
+    //     }
+    //   })
+    // }
   }
 
 </script>

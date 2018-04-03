@@ -84,7 +84,8 @@ const actions = {
       const deviceIds = res.data
       if (deviceIds !== undefined) {
         apiStore.commit(types.SET_DEVICES, deviceIds)
-        deviceIds.forEach(deviceId => apiStore.dispatch('retrievePreciseDevice', deviceId))
+        const promises = deviceIds.map(deviceId => apiStore.dispatch('retrievePreciseDevice', deviceId))
+        await Promise.all(promises)
       } else {
         console.error('Error while getting devices', res)
       }
@@ -132,8 +133,10 @@ const actions = {
 
         apiStore.commit(types.SET_MEASUREMENTS, {deviceId, measurementType, measurementRate, measurements})
 
-        updateUnusualMeasurements(apiStore, measurements, {deviceId, measurementType, measurementRate})
-        detectDangerousValues(apiStore, measurements, {deviceId, measurementType, measurementRate})
+        await Promise.all([
+          updateUnusualMeasurements(apiStore, measurements, {deviceId, measurementType, measurementRate}),
+          detectDangerousValues(apiStore, measurements, {deviceId, measurementType, measurementRate})
+        ])
       } else {
         console.error('Error while getting measurements', res)
       }
@@ -150,36 +153,10 @@ const actions = {
         console.error('Error while getting sensor precise informations', res)
       }
     }
-  ),
-
-  retrieveUnusualMeasurements: cache('retrieveUnusualMeasurements',
-    async function (apiStore, {deviceId, measurementType, measurementRate}) {
-      if (measurementRate === undefined) {
-        measurementRate = measurementRates.MEASUREMENT_HOURS
-      }
-
-      const res =
-      await axios.get('http://shed.kent.ac.uk/device' +
-                      '/' + deviceId +
-                      '/' + measurementType +
-                      '/' + measurementRate)
-      if (res.data !== undefined) {
-        const measurements = res.data
-          .map(measurement => ({
-            time: new Date(measurement.time),
-            value: measurement.value || measurement.mean,
-            min: measurement.min || measurement.value,
-            max: measurement.max || measurement.value
-          }))
-
-      } else {
-        console.error('Error while getting measurements', res)
-      }
-    }
   )
 }
 
-function updateUnusualMeasurements (apiStore, measurements, {deviceId, measurementType, measurementRate}) {
+async function updateUnusualMeasurements (apiStore, measurements, {deviceId, measurementType, measurementRate}) {
   var sum = 0;
   for (var i = 0; i < measurements.length; i++) {
     sum += parseFloat( measurements[i]['value'] );
