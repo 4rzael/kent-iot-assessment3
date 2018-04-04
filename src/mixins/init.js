@@ -1,3 +1,4 @@
+import moment from 'moment'
 import * as measurementTypes from '../utils/measurementTypes'
 import * as measurementRates from '../utils/measurementRates'
 import * as types from '../store/mutation-types'
@@ -39,6 +40,22 @@ export const initMixin = {
             this.$store.dispatch('retrieveLastMeasurement', {
               deviceId: device.id,
               measurementType: measurementTypes.MEASUREMENT_BATTERY
+            }).then(() => {
+              const battery = this.$store.getters.getMeasurements(
+                device.id,
+                measurementTypes.MEASUREMENT_BATTERY,
+                measurementRates.MEASUREMENT_LAST
+              )
+
+              if (battery.value < 25) {
+                console.log('Battery level critical')
+                this.$store.dispatch('postNotification', {
+                  message: `Device ${device.id}: ${battery.value}% battery left`,
+                  date: moment(battery.time).toDate(),
+                  type: 'danger',
+                  category: `devices/${device.id}/battery`
+                })
+              }
             })
           ))
         )

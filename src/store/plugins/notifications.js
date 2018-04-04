@@ -1,6 +1,7 @@
 import * as types from '../mutation-types'
 import axios from 'axios'
 import Vue from 'vue'
+import moment from 'moment'
 
 import cache from '../plugins/cache'
 import { subscribe } from '../plugins/mqtt'
@@ -18,11 +19,11 @@ const state = {
 const mutations = {
   [types.SET_NOTIFICATIONS] (apiState, notifications) {
     Vue.set(apiState, 'notifications', notifications)
-    apiState.notifications.sort((a, b) => b.date - a.date)
+    apiState.notifications.sort((a, b) => moment(b.date) - moment(a.date))
   },
   [types.ADD_NOTIFICATION] (apiState, notification) {
     apiState.notifications.push(notification)
-    apiState.notifications.sort((a, b) => b.date - a.date)
+    apiState.notifications.sort((a, b) => moment(b.date) - moment(a.date))
   },
   [types.EDIT_NOTIFICATION] (apiState, notification) {
     const idx = apiState.notifications.findIndex(n => n._id === notification._id)
