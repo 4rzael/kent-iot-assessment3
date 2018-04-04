@@ -1,0 +1,5 @@
+{
+  "database": {
+    "HOST": "mongodb://172.17.0.1"
+  }
+}
