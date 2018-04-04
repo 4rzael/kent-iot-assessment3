@@ -61,12 +61,13 @@ const actions = {
     await axios.delete(`${API_HOST}/${notif._id}`)
     notifStore.commit(types.DELETE_NOTIFICATION, notif)
   },
-  postNotification: async function (notifStore, {message, date, type, category}) {
+  postNotification: async function (notifStore, {message, date, type, category, hash}) {
     const notif = {
       message,
       date: date || new Date(),
       type,
-      category
+      category,
+      hash
     }
 
     await axios.post(API_HOST, notif)

@@ -117,7 +117,7 @@
             date: new Date(),
             type: 'success',
             category: 'sensors',
-            hash: `acion_${actionId}`
+            hash: `action_${actionId}`
           })
         }
       })
