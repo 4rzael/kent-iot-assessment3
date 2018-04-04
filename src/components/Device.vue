@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="card-text btn" style="cursor: none; border-bottom: 1px; border-bottom-style: solid;">
+    <p class="card-text btn" style="cursor: default; border-bottom: 1px; border-bottom-style: solid;">
       <i class="fa fa-bell pull-left nomargin"></i>
       Unusual Values
     </p>

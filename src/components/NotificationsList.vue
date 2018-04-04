@@ -82,4 +82,9 @@
   text-decoration: underline;
 }
 
+.dropdown-menu {
+  height: auto;
+  max-height: 410px;
+  overflow-x: hidden;
+}
 </style>
