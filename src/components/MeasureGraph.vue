@@ -95,6 +95,10 @@ export default {
     },
     unitOfTime () {
       const flattenedDatasets = this.datasets.map(d => d.data).reduce((a, b) => a.concat(b), [])
+      if (flattenedDatasets.length === 0) {
+        return 'day'
+      }
+
       const first = moment(flattenedDatasets.reduce((a, b) => a.x < b.x ? a : b).x)
       const last = moment(flattenedDatasets.reduce((a, b) => a.x > b.x ? a : b).x)
 
