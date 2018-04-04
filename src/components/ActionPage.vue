@@ -26,7 +26,7 @@
   </div>
 </template>
 <script>
-  import {sendClient, subscribe} from '../store/plugins/mqtt'
+  import {sendClient, subscribe, isMicrocontrollerFeedback} from '../store/plugins/mqtt'
   export const MQTT_TOPIC = 'presence42'
   import Action from "@/components/Action"
   import Card from 'src/components/UIComponents/Cards/Card.vue'
@@ -109,6 +109,20 @@
       await this.$store.dispatch('retrieveDevices'),
       this.selectOptions = this.selectOptions.concat(this.devices),
       subscribe(MQTT_TOPIC)
+
+      this.$store.subscribe(({type, payload}) => {
+        const {topic, message} = payload
+
+        if (type === 'saveMessage' && topic === MQTT_TOPIC && isMicrocontrollerFeedback(message)) {
+          this.$store.dispatch('postNotification', {
+            message: message.toString(),
+            date: new Date(),
+            type: 'success',
+            category: 'sensors'
+          })
+        }
+      })
+
     },
     methods: {
       notifyMesg (mesg, type) {

@@ -5,6 +5,7 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
 import * as measurementRates from '../utils/measurementRates'
 import graphColors from '../utils/graphColors'
 import Chart from './Chartjs.vue'
@@ -92,11 +93,39 @@ export default {
     nbDevices () {
       return this.datasets.length
     },
+    unitOfTime () {
+      const flattenedDatasets = this.datasets.map(d => d.data).reduce((a, b) => a.concat(b), [])
+      const first = moment(flattenedDatasets.reduce((a, b) => a.x < b.x ? a : b).x)
+      const last = moment(flattenedDatasets.reduce((a, b) => a.x > b.x ? a : b).x)
+
+      if (first != last) {
+        const time = moment.duration(last.diff(first))
+        const abs = (x) => x > 0 ? x : -x
+        const minutes = abs(time.asMinutes())
+
+        if (minutes < 60 * 3) {
+          return 'minute'
+        } else if (minutes < 60 * 24 * 3) {
+          return 'hour'
+        } else if (minutes < 60 * 24 * 30 * 3) {
+          return 'day'
+        } else {
+          return 'month'
+        }
+      } else {
+        return 'day'
+      }
+
+      moment(last.x)
+    },
     options () {
       return {
         scales: {
           xAxes: [{
-            type: 'time'
+            type: 'time',
+            time: {
+              unit: this.unitOfTime
+            }
           }]
         },
         annotation: this.annotations
