@@ -67,7 +67,7 @@
       notificationSeenStyle(read) {
         let retVal = 'background-color: '
 
-        return retVal += (read ? '#BEBEBE;' : 'none')
+        return retVal += (read ? '#BEBEBE;' : 'initial')
       }
     },
     mounted () {
