@@ -111,11 +111,13 @@
         const {topic, message} = payload
 
         if (type === 'saveMessage' && topic === MQTT_TOPIC && isMicrocontrollerFeedback(message)) {
+          const [msg, actionId] = message.toString().split('::')
           this.$store.dispatch('postNotification', {
-            message: message.toString(),
+            message: msg,
             date: new Date(),
             type: 'success',
-            category: 'sensors'
+            category: 'sensors',
+            hash: `acion_${actionId}`
           })
         }
       })
