@@ -53,8 +53,7 @@ export default {
         plugins: [Annotations],
         type: this.type,
         data: this.data,
-        options: this.options,
-        plugins: this.plugins
+        options: this.options
       })
     }
   },

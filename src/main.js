@@ -33,7 +33,7 @@ const router = new VueRouter({
   linkActiveClass: 'nav-item active'
 })
 
-const unsync = sync(store, router) // done. Returns an unsync callback fn
+sync(store, router) // done. Returns an unsync callback fn
 
 /* eslint-disable no-new */
 new Vue({

@@ -61,7 +61,6 @@ const mutations = {
       Vue.set(apiState.unusualMeasurements[deviceId], measurementType, {})
     }
     Vue.set(apiState.unusualMeasurements[deviceId][measurementType], measurementRate, unusualMeasurements)
-
   }
 }
 
@@ -130,7 +129,6 @@ const actions = {
             max: measurement.max || measurement.value
           }))
 
-
         apiStore.commit(types.SET_MEASUREMENTS, {deviceId, measurementType, measurementRate, measurements})
 
         await Promise.all([
@@ -157,36 +155,28 @@ const actions = {
 }
 
 async function updateUnusualMeasurements (apiStore, measurements, {deviceId, measurementType, measurementRate}) {
-  var sum = 0;
-  for (var i = 0; i < measurements.length; i++) {
-    sum += parseFloat( measurements[i]['value'] );
-  }
+  const values = measurements.map(m => parseFloat(m.value))
+  const add = (a, b) => a + b
 
-  var avg = sum / measurements.length;
+  const sum = values.reduce(add, 0)
+  const avg = sum / measurements.length
 
-  var standardDeviation = 0;
-  for (var i = 0; i < measurements.length; i++) {
-    standardDeviation += Math.pow( parseFloat( measurements[i]['value'] ) - avg, 2 );
-  }
-  standardDeviation = Math.sqrt(standardDeviation / measurements.length);
+  const variance = values.map(v => Math.pow(v - avg, 2)).reduce(add, 0) / measurements.length
+  const standardDeviation = Math.sqrt(variance)
 
-  var unusualMeasurements = [];
-  const minUsualValue = avg - (2 * standardDeviation);
-  const maxUsualValue = avg + (2 * standardDeviation);
+  const minUsualValue = avg - (2 * standardDeviation)
+  const maxUsualValue = avg + (2 * standardDeviation)
 
-  for (var i = 0; i < measurements.length; i++) {
-    const value =  parseFloat( measurements[i]['value'] );
-    if (value < minUsualValue || value > maxUsualValue) {
-      unusualMeasurements.push(measurements[i]);
-    }
-  }
-
-  // console.log(unusualMeasurements);
+  const unusualMeasurements = measurements
+    .filter(measurement => {
+      const value = parseFloat(measurement.value)
+      return (value < minUsualValue || value > maxUsualValue)
+    })
 
   apiStore.commit(types.SET_UNUSUAL_MEASUREMENTS, {deviceId, measurementType, measurementRate, unusualMeasurements})
 }
 
-async function detectDangerousValues(apiStore, measurements, {deviceId, measurementType}) {
+async function detectDangerousValues (apiStore, measurements, {deviceId, measurementType}) {
   // get greenhouse
   if (apiStore.state.preciseDevices[deviceId] === undefined) {
     await apiStore.dispatch('retrievePreciseDevice', deviceId)

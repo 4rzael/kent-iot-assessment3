@@ -13,13 +13,12 @@ const module = {
   },
   mutations: {
     saveMessage (state, {topic, message}) {
-
       if (state.messages[topic] === undefined) {
         Vue.set(state.messages, topic, [])
       }
       if (isMicrocontrollerFeedback(message)) {
-        console.log(`[*] Saving '${message.toString()}' to store`);
-        state.messages[topic].push(message.toString());
+        console.log(`[*] Saving '${message.toString()}' to store`)
+        state.messages[topic].push(message.toString())
       }
     }
   },
@@ -38,7 +37,7 @@ const module = {
   }
 }
 
-let client;
+let client
 
 export const sendClient = function (topic, mesg, options) {
   client.publish(topic, mesg, options)
@@ -58,7 +57,7 @@ export const subscribe = function (topic, options) {
 
 export const mqttPlugin = function (store) {
   const mqtt = require('mqtt')
-  client = mqtt.connect(MQTT_SERVER);
+  client = mqtt.connect(MQTT_SERVER)
   toSubscribe.forEach(({topic, options}) => subscribe(topic, options))
 
   client.on('message', function (topic, message) {

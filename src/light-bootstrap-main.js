@@ -12,7 +12,6 @@ import SideBar from './components/UIComponents/SidebarPlugin'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'vue-notifyjs/themes/default.scss'
 import './assets/sass/light-bootstrap-dashboard.scss'
-import './assets/css/demo.css'
 
 // library auto imports
 import 'es6-promise/auto'

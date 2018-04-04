@@ -6,9 +6,6 @@ import moment from 'moment'
 import cache from '../plugins/cache'
 import { subscribe } from '../plugins/mqtt'
 
-import * as measurementRates from '../../utils/measurementRates'
-import * as measurementTypes from '../../utils/measurementTypes'
-
 const MODULE_NAME = 'notifications'
 const API_HOST = 'http://iot.4rzael.com:3000'
 
@@ -61,7 +58,7 @@ const actions = {
     }
   },
   deleteNotification: async function (notifStore, notif) {
-    const res = await axios.delete(`${API_HOST}/${notif._id}`)
+    await axios.delete(`${API_HOST}/${notif._id}`)
     notifStore.commit(types.DELETE_NOTIFICATION, notif)
   },
   postNotification: async function (notifStore, {message, date, type, category}) {
@@ -78,11 +75,11 @@ const actions = {
     notifStore.commit(types.ADD_NOTIFICATION, notif)
   },
   blockNotifications: async function (notifStore, {category, date}) {
-    const res = await axios.put(`${API_HOST}/block_notifications`, {
+    await axios.put(`${API_HOST}/block_notifications`, {
       category,
       date: date || new Date()
     })
-  },
+  }
 }
 
 const getters = {
@@ -97,7 +94,7 @@ const module = {
 
 export const notificationsPlugin = function (store) {
   store.registerModule(MODULE_NAME, module)
-  subscribe('/notifications', {qos:2})
+  subscribe('/notifications', {qos: 2})
 
   store.subscribe(({type, payload}) => {
     const {topic, message} = payload

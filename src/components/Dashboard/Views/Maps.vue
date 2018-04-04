@@ -40,17 +40,17 @@
       Weather
     },
     methods: {
-      gotoGreenhouse (greenhouse_id) {
-        this.$router.push(`/greenhouses/${greenhouse_id}`)
+      gotoGreenhouse (greenhouseId) {
+        this.$router.push(`/greenhouses/${greenhouseId}`)
       }
     },
     computed: {
       sites () {
-        console.log("Devices from store:", this.$store.state.api.sites);
+        console.log('Devices from store:', this.$store.state.api.sites)
         return this.$store.state.api.sites
       },
       mapMarkers () {
-       return this.sites.map(site => ({id: site.id, name: site.name, position: {lat: site.lat, lng: site.lon}}))
+        return this.sites.map(site => ({id: site.id, name: site.name, position: {lat: site.lat, lng: site.lon}}))
       }
     },
     mounted () {
@@ -61,10 +61,10 @@
         center: {
           lat: THANET_EARTH_LAT,
           lng: THANET_EARTH_LON
-        },
+        }
+      }
     }
   }
-}
 </script>
 
 <style>

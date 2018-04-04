@@ -98,7 +98,7 @@ export default {
       const first = moment(flattenedDatasets.reduce((a, b) => a.x < b.x ? a : b).x)
       const last = moment(flattenedDatasets.reduce((a, b) => a.x > b.x ? a : b).x)
 
-      if (first != last) {
+      if (first.isSame(last)) {
         const time = moment.duration(last.diff(first))
         const abs = (x) => x > 0 ? x : -x
         const minutes = abs(time.asMinutes())
@@ -115,8 +115,6 @@ export default {
       } else {
         return 'day'
       }
-
-      moment(last.x)
     },
     options () {
       return {
@@ -151,8 +149,3 @@ export default {
   }
 }
 </script>
-<style>
-  .card:hover {
-    background-color: #ececec;
-  }
-</style>

@@ -35,16 +35,17 @@
     },
     data () {
       return {
-        tableColumns: ['id', 'date', 'description', 'action'],
-        }
+        tableColumns: ['id', 'date', 'description', 'action']
+      }
     },
     computed: {
       notifs () {
         return this.$store.state.notifications.notifications.map((notification, index) => ({
-                                                      id: index,
-                                                      date: notification.date,
-                                                      description: notification.message,
-                                                      read: notification.read}))
+          id: index,
+          date: notification.date,
+          description: notification.message,
+          read: notification.read
+        }))
       },
       unreadNumber () {
         return this.notifs.filter(n => n.read === false).length
@@ -64,10 +65,8 @@
         const m = moment(date)
         return `${m.format('ddd, MMM Do YYYY, k:mm')} (${m.fromNow()})`
       },
-      notificationSeenStyle(read) {
-        let retVal = 'background-color: '
-
-        return retVal += (read ? '#BEBEBE;' : 'initial')
+      notificationSeenStyle (read) {
+        return `background-color: ${read ? '#BEBEBE;' : 'initial'}`
       }
     },
     mounted () {

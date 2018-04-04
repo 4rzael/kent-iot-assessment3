@@ -49,7 +49,7 @@
     props: ['deviceId'],
     methods: {
       batteryStyle: function (value) {
-        let finalColor = 'green';
+        let finalColor = 'green'
 
         if (value > 110) {
           finalColor = 'red'
@@ -62,17 +62,18 @@
         } else {
           finalColor = 'red'
         }
-        console.log("value:", value);
-        console.log("finalColor:", finalColor);
-        return 'color:' + finalColor + ';'
+        console.log('value:', value)
+        console.log('finalColor:', finalColor)
+        return `color: ${finalColor};`
       },
       errorsStyle: function (value) {
-        let finalColor = 'green';
+        let finalColor = 'green'
 
-        if (value > 2)
+        if (value > 2) {
           finalColor = 'red'
-        else if (value > 0)
+        } else if (value > 0) {
           finalColor = 'orange'
+        }
         return 'color:' + finalColor + ';'
       },
       errorsIcon: function (value) {
@@ -86,14 +87,11 @@
 
         if (value >= 110) {
           retVal += 'fa-cancel'
-        }
-        else if (value > 100) {
+        } else if (value > 100) {
           retVal += 'fa-check'
-        }
-        else if (value >= 75) {
+        } else if (value >= 75) {
           retVal += 'fa-check'
-        }
-        else if (value >= 25) {
+        } else if (value >= 25) {
           retVal += 'fa-exclamation-circle'
         } else {
           retVal += 'fa-cancel'
@@ -156,18 +154,14 @@
         } else {
         }
         return 0
-      },
+      }
     },
     mounted () {
-        this.$store.dispatch('retrieveLastMeasurement', {
-          deviceId: this.deviceId,
-          measurementType: measurementTypes.MEASUREMENT_BATTERY
-        })
-        // this.$store.dispatch('retrieveMeasurements', {
-        //   deviceId: this.deviceId,
-        //   measurementType: measurementTypes.MEASUREMENT_BATTERY
-        // }),
-      }
+      this.$store.dispatch('retrieveLastMeasurement', {
+        deviceId: this.deviceId,
+        measurementType: measurementTypes.MEASUREMENT_BATTERY
+      })
+    }
   }
 </script>
 

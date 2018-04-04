@@ -3,7 +3,6 @@ import Vuex from 'vuex'
 import {cachePlugin} from './plugins/cache'
 import {mqttPlugin} from './plugins/mqtt'
 import {notificationsPlugin} from './plugins/notifications'
-import * as types from './mutation-types'
 
 import api from './modules/api'
 

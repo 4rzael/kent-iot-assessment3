@@ -25,7 +25,7 @@ export const initMixin = {
 
       // then all measurements and battery levels
       // await Promise.all(
-        Object.values(this.$store.state.api.preciseDevices)
+      Object.values(this.$store.state.api.preciseDevices)
         .map(device => Promise.all(
           // get measurements
           device.measures
