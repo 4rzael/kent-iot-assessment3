@@ -1,9 +1,15 @@
 <template>
   <div>
+    <p class="card-text btn" style="cursor: none; border-bottom: 1px; border-bottom-style: solid;">
+      <i class="fa fa-bell pull-left nomargin"></i>
+      Unusual Values
+    </p>
+    <div>
       <p class="card-text btn" style="cursor: default;">
-        <i class="fa fa-battery pull-left nomargin" :style="batteryStyle(currentBattery)"></i>
-        Battery: {{currentBattery}}%
+        <i :class="batteryIcon(currentBattery)" :style="batteryStyle(currentBattery)"></i>
+          Battery: {{currentBattery}}%
       </p>
+    </div>
     <div>
       <p class="card-text btn" style="cursor: default;">
         <i :class="errorsIcon(unusualTemperatureMeasurement)" :style="errorsStyle(unusualTemperatureMeasurement)"></i>
@@ -43,36 +49,58 @@
     props: ['deviceId'],
     methods: {
       batteryStyle: function (value) {
-        let final_color = 'green';
+        let finalColor = 'green';
 
-        if (value >= 95) {
-          final_color = 'green'
-        } else if (value > 15) {
-          final_color = 'orange'
+        if (value > 110) {
+          finalColor = 'red'
+        } else if (value > 100) {
+          finalColor = 'orange'
+        } else if (value >= 95) {
+          finalColor = 'green'
+        } else if (value > 25) {
+          finalColor = 'orange'
         } else {
-          final_color = 'red'
+          finalColor = 'red'
         }
-        return 'color:' + final_color + ';'
+        console.log("value:", value);
+        console.log("finalColor:", finalColor);
+        return 'color:' + finalColor + ';'
       },
       errorsStyle: function (value) {
-        let final_color = 'green';
+        let finalColor = 'green';
 
         if (value > 2)
-          final_color = 'red'
+          finalColor = 'red'
         else if (value > 0)
-          final_color = 'orange'
-        return 'color:' + final_color + ';'
+          finalColor = 'orange'
+        return 'color:' + finalColor + ';'
       },
       errorsIcon: function (value) {
         const positive = 'fa-check'
         const negative = 'fa-exclamation-circle'
+
         return 'fa ' + (value > 2 ? negative : positive) + ' pull-left nomargin'
       },
-    },
-    data: () => ({
-      batteryColor (value) {
+      batteryIcon: function (value) {
+        let retVal = 'fa '
+
+        if (value >= 110) {
+          retVal += 'fa-cancel'
+        }
+        else if (value > 100) {
+          retVal += 'fa-check'
+        }
+        else if (value >= 75) {
+          retVal += 'fa-check'
+        }
+        else if (value >= 25) {
+          retVal += 'fa-exclamation-circle'
+        } else {
+          retVal += 'fa-cancel'
+        }
+        return (retVal + ' pull-left nomargin')
       }
-    }),
+    },
     computed: {
       currentBattery () {
         const lastBattery = this.$store.getters.getMeasurements(

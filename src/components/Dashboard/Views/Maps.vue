@@ -14,6 +14,7 @@
             :draggable="false"
             :clickable="true"
             @click="gotoGreenhouse(marker.id)"
+            :label="marker.id"
             :title="marker.name">
         </gmap-marker>
       </gmap-map>

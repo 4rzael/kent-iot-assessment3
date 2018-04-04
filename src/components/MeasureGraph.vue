@@ -122,3 +122,8 @@ export default {
   }
 }
 </script>
+<style>
+  .card:hover {
+    background-color: #ececec;
+  }
+</style>
