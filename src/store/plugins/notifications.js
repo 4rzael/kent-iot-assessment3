@@ -18,9 +18,11 @@ const state = {
 const mutations = {
   [types.SET_NOTIFICATIONS] (apiState, notifications) {
     Vue.set(apiState, 'notifications', notifications)
+    apiState.notifications.sort((a, b) => b.date - a.date)
   },
   [types.ADD_NOTIFICATION] (apiState, notification) {
     apiState.notifications.push(notification)
+    apiState.notifications.sort((a, b) => b.date - a.date)
   },
   [types.EDIT_NOTIFICATION] (apiState, notification) {
     const idx = apiState.notifications.findIndex(n => n._id === notification._id)

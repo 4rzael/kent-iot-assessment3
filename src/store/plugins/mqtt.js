@@ -3,6 +3,10 @@ import Vue from 'vue'
 export const MQTT_SERVER = 'ws://iot.4rzael.com:9001'
 export const MQTT_EXPECTED_MESSAGE = '[+] Microcontroller finished: '
 
+export const isMicrocontrollerFeedback = function (message) {
+  return message.toString().startsWith(MQTT_EXPECTED_MESSAGE)
+}
+
 const module = {
   state: {
     messages: {} // {TOPIC: [String, String, String]}
@@ -13,7 +17,7 @@ const module = {
       if (state.messages[topic] === undefined) {
         Vue.set(state.messages, topic, [])
       }
-      if (message.toString().startsWith(MQTT_EXPECTED_MESSAGE)) {
+      if (isMicrocontrollerFeedback(message)) {
         console.log(`[*] Saving '${message.toString()}' to store`);
         state.messages[topic].push(message.toString());
       }
