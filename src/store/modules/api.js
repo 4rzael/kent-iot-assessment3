@@ -208,14 +208,24 @@ async function detectDangerousValues(apiStore, measurements, {deviceId, measurem
 
     console.log('fronts', deviceId, measurementType, fronts, 'limits', limits)
 
+    const category = `${greenhouse.id}/${measurementType}`
     // make notifications from the OK->KO fronts
-    fronts.forEach(measurement => {
-      apiStore.dispatch('postNotification', {
-        message: `${greenhouse.name}: ${measurementType}: Critical value (too ${measurement.value > limits.max ? 'high' : (measurement.value < limits.min ? 'low' : 'normal')})`,
-        date: measurement.time,
-        type: 'danger',
-        category: `${greenhouse.id}/${measurementType}`
-      })
+    await Promise.all(fronts.map(async (measurement) => {
+      try {
+        return await apiStore.dispatch('postNotification', {
+          message: `${greenhouse.name}: ${measurementType}: Critical value (too ${measurement.value > limits.max ? 'high' : (measurement.value < limits.min ? 'low' : 'normal')})`,
+          date: measurement.time,
+          type: 'danger',
+          category
+        })
+      } catch (e) {
+        console.warn('Cannot post new notification:', e)
+      }
+    }))
+
+    apiStore.dispatch('blockNotifications', {
+      category,
+      date: new Date()
     })
   }
 }

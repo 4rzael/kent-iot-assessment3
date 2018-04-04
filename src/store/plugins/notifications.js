@@ -76,7 +76,13 @@ const actions = {
   },
   addNotification: async function (notifStore, notif) {
     notifStore.commit(types.ADD_NOTIFICATION, notif)
-  }
+  },
+  blockNotifications: async function (notifStore, {category, date}) {
+    const res = await axios.put(`${API_HOST}/block_notifications`, {
+      category,
+      date: date || new Date()
+    })
+  },
 }
 
 const getters = {

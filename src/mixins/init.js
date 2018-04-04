@@ -24,7 +24,7 @@ export const initMixin = {
       ])
 
       // then all measurements and battery levels
-      await Promise.all(
+      // await Promise.all(
         Object.values(this.$store.state.api.preciseDevices)
         .map(device => Promise.all(
           // get measurements
@@ -40,26 +40,32 @@ export const initMixin = {
             this.$store.dispatch('retrieveLastMeasurement', {
               deviceId: device.id,
               measurementType: measurementTypes.MEASUREMENT_BATTERY
-            }).then(() => {
+            }).then(async () => {
               const battery = this.$store.getters.getMeasurements(
                 device.id,
                 measurementTypes.MEASUREMENT_BATTERY,
                 measurementRates.MEASUREMENT_LAST
               )
+              const category = `devices/${device.id}/battery`
 
               if (battery.value < 25) {
                 console.log('Battery level critical')
-                this.$store.dispatch('postNotification', {
+                await this.$store.dispatch('postNotification', {
                   message: `Device ${device.id}: ${battery.value}% battery left`,
                   date: moment(battery.time).toDate(),
                   type: 'danger',
-                  category: `devices/${device.id}/battery`
+                  category
                 })
               }
+
+              this.$store.dispatch('blockNotifications', {
+                category,
+                date: moment(battery.time).toDate()
+              })
             })
           ))
+          // )
         )
-      )
     }
   },
   mounted: async function () {
