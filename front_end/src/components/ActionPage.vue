@@ -1,7 +1,12 @@
 <template>
   <div style="margin-left: 25px">
     <h1>Actions</h1>
-    <p>(TO DELETE) LAST MESSAGES: {{LastMessages}}</p>
+    <p style="font-size: larger">
+      This page is dedicated for the farmers to interact with their crops.
+      A farmer should watch for any notifications produced by the system and act consequently.
+      On this page, the farmer can click on the greenhouse in wich he want to take action upon
+      and send the appropriate command to the connected microcontroller.
+    </p>
     <div class="row">
       <card v-for="element in actionsData"
               :key="element.name">
@@ -43,7 +48,7 @@
           section_name: 'Temperature',
           name: 'Heat up',
           values: {
-            msg: 'Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place Heat up the place ',
+            msg: 'This action will heat up the crops.',
             url: 'https://www.river1467.com.au/images/2017/11/FIREA.jpg',
             command: 'temp_up',
             selected: null
@@ -53,7 +58,7 @@
           section_name: 'Temperature',
           name: 'Cool down',
           values: {
-            msg: 'Cool down place',
+            msg: 'This action will cool down the crops.',
             url: 'https://in8life.com/wp-content/uploads/2016/07/three-ice-cubes.jpg',
             command: 'temp_down',
             selected: null
@@ -63,7 +68,7 @@
           section_name: 'Nutriments',
           name: 'Nutriments up',
           values: {
-            msg: 'This action adds some nutriments to the plant',
+            msg: 'This action adds some nutriments to the plant. It is essential to feed the plant whenever a notification is saying so.',
             url: 'https://www.um.edu.mt/think/wp-content/uploads/2014/03/green-chemistry-glassware_shutterstock_80851456.jpg',
             command: 'nutriments_up',
             selected: null
@@ -73,7 +78,7 @@
           section_name: 'Nutriments',
           name: 'Nutriments down',
           values: {
-            msg: 'An action that reduces the nutriments of the plant',
+            msg: 'An action that reduces the nutriments of the plant.',
             url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTlx-wWUxq5umkxwNIrc7tAGxbNwM5HgRGCfsRWttcwp5U4Ivzy',
             command: 'nutriments_down',
             selected: null
@@ -83,7 +88,7 @@
           section_name: 'Watering',
           name: 'Water plants',
           values: {
-            msg: 'This action waters the plant. Watering the plants is important especially if ',
+            msg: 'This action waters the plant. Watering the plants is important!',
             url: 'https://image.freepik.com/free-photo/water-background-with-splashes_23-2147608335.jpg',
             command: 'water_plants',
             selected: null
